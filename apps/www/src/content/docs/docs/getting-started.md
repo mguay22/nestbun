@@ -30,10 +30,6 @@ await app.listen(3000);
 
 See [Migrating from Express](../migrating-from-express/) for the handful of things worth checking in a larger app.
 
-## Troubleshooting
-
-**`TypeError: undefined is not an object (evaluating 'descriptor.value')` on startup.** Bun 1.4 did not find `experimentalDecorators` and compiled TC39 decorators instead. It reads `tsconfig.json` from the directory you run `bun` in, so in a monorepo add one at the root that extends your base config.
-
 ## Next steps
 
 - [Configuration](../configuration/) for adapter and `Bun.serve()` options.
