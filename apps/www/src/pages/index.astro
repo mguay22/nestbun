@@ -49,9 +49,9 @@ await app.listen(3000);`;
   }}
 >
   <section class="hero-code">
-    <Code code={hero} lang="ts" title="src/main.ts" />
-    <p class="run">Or start a new project with it already wired up:</p>
     <Code code="bun create @nestbun my-api --adapter bun" lang="sh" />
+    <p class="run">Or add it to an existing app: one line in <code>main.ts</code> is the whole migration.</p>
+    <Code code={hero} lang="ts" title="src/main.ts" />
   </section>
 
   <section>
