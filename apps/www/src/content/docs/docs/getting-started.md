@@ -28,13 +28,7 @@ const app = await NestFactory.create<NestBunApplication>(AppModule, new BunAdapt
 await app.listen(3000);
 ```
 
-Run it directly, no `nest build`:
-
-```bash
-bun --watch src/main.ts
-```
-
-The `NestBunApplication` type adds the platform methods (`useStaticAssets`, `setViewEngine`, `useBodyParser`) to `INestApplication`, the same way `NestExpressApplication` does for Express. See [Migrating from Express](../migrating-from-express/) for the handful of things worth checking in a larger app.
+See [Migrating from Express](../migrating-from-express/) for the handful of things worth checking in a larger app.
 
 ## Troubleshooting
 
