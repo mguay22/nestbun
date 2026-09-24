@@ -49,8 +49,12 @@ await app.listen(3000);`;
   }}
 >
   <section class="hero-code">
-    <Code code="bun create @nestbun my-api --adapter bun" lang="sh" />
-    <p class="run">Or add it to an existing app: one line in <code>main.ts</code> is the whole migration.</p>
+    <h3>Start a new project</h3>
+    <Code code={'bun create @nestbun my-api --adapter bun\ncd my-api && bun dev'} lang="sh" />
+
+    <h3>Or add it to an existing project</h3>
+    <Code code={'bun add @nestbun/platform\nbun remove @nestjs/platform-express'} lang="sh" />
+    <p class="run">Then one line in <code>main.ts</code> is the whole migration:</p>
     <Code code={hero} lang="ts" title="src/main.ts" />
   </section>
 
@@ -142,10 +146,17 @@ await app.listen(3000);`;
   .hero-code {
     margin-top: 1rem;
   }
+  .hero-code h3 {
+    font-size: 1.1rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .hero-code h3:first-child {
+    margin-top: 0;
+  }
   .run {
     color: var(--sl-color-gray-3);
     font-size: 0.9rem;
-    margin: 1.25rem 0 0.5rem;
+    margin: 1rem 0 0.5rem;
   }
   h2 {
     font-size: 1.75rem;
