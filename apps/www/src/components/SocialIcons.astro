@@ -1,0 +1,37 @@
+---
+// Overrides Starlight's SocialIcons to add text links before the GitHub / npm icons.
+import Default from '@astrojs/starlight/components/SocialIcons.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const links = [
+  { label: 'Docs', href: `${base}/docs/getting-started/` },
+  { label: 'Benchmarks', href: `${base}/docs/benchmarks/` },
+];
+---
+
+<nav class="header-links" aria-label="Site">
+  {links.map((l) => <a href={l.href}>{l.label}</a>)}
+</nav>
+<Default {...Astro.props}><slot /></Default>
+
+<style>
+  .header-links {
+    display: flex;
+    gap: 1.25rem;
+    margin-inline-end: 1rem;
+  }
+  .header-links a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+  }
+  .header-links a:hover {
+    color: var(--sl-color-white);
+  }
+  @media (max-width: 50rem) {
+    .header-links {
+      display: none;
+    }
+  }
+</style>

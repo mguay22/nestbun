@@ -21,6 +21,15 @@
   --bench-bar-hi: #a8480a;
 }
 
+/* Header: keep the logo small and snug against the title */
+.site-title {
+  gap: 0.6rem;
+}
+.site-title img {
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
 /* Tighter code block under the landing page hero */
 .hero-code pre {
   font-size: 0.85rem;

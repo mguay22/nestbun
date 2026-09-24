@@ -17,6 +17,7 @@ export default defineConfig({
       description: 'NestJS on Bun, natively. An HTTP adapter that runs Nest on Bun.serve().',
       logo: { src: './src/assets/logo.svg', alt: 'nestbun' },
       customCss: ['./src/styles/custom.css'],
+      components: { SocialIcons: './src/components/SocialIcons.astro' },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/mguay22/nestbun' },
         { icon: 'npm', label: 'npm', href: 'https://www.npmjs.com/package/@nestbun/platform' },
