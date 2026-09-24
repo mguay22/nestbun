@@ -1,0 +1,20 @@
+{
+  "name": "nestbun-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "apps/*",
+    "bench"
+  ],
+  "scripts": {
+    "test": "bun test packages",
+    "typecheck": "bun run --filter '*' typecheck",
+    "build": "bun run --filter './packages/*' build"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "bun-types": "1.4.2",
+    "prettier": "3.9.9"
+  }
+}

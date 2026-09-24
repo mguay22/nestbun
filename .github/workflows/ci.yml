@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1' # weekly: catch NestJS/Bun releases that break the adapter
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        bun: [latest, canary]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ matrix.bun }}
+      - run: bun install --frozen-lockfile
+      - run: bun run --filter '@nestbun/platform' typecheck
+      - run: bun run --filter '@nestbun/platform' build
+      - run: bun test packages
+      - name: Example boots
+        run: |
+          cd examples/basic
+          PORT=3123 bun src/main.ts & sleep 3
+          curl -sf http://localhost:3123/cats | grep Tom

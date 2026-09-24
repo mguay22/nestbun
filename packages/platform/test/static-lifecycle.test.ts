@@ -1,0 +1,141 @@
+import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
+import { Controller, Get, Module, Res } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { BunAdapter, type BunResponse } from '../src/index.js';
+import { bootstrap, type TestApp } from './helpers.js';
+
+@Controller()
+class RootController {
+  @Get()
+  root() {
+    return { root: true };
+  }
+  @Get('cookie')
+  cookie(@Res() res: BunResponse) {
+    res.cookie('a', '1', { httpOnly: true, sameSite: 'lax' });
+    res.cookie('b', 'two words', { maxAge: 60_000 });
+    res.status(200).json({ ok: true });
+  }
+  @Get('slow')
+  async slow() {
+    await Bun.sleep(150);
+    return { slow: true };
+  }
+}
+@Module({ controllers: [RootController] })
+class RootModule {}
+
+describe('static assets', () => {
+  let t: TestApp;
+  let dir: string;
+  beforeAll(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'nestbun-static-'));
+    await writeFile(join(dir, 'index.html'), '<h1>home</h1>');
+    await writeFile(join(dir, 'app.js'), 'console.log(1)');
+    await mkdir(join(dir, 'docs'));
+    await writeFile(join(dir, 'docs', 'index.html'), 'docs home');
+    await writeFile(join(dir, '.secret'), 'nope');
+    t = await bootstrap(RootModule, {
+      configure: (app, adapter) => {
+        adapter.useStaticAssets(dir, { prefix: '/public', maxAge: 60_000 });
+      },
+    });
+  });
+  afterAll(() => t.close());
+
+  it('serves files with content type, caching, and ETag', async () => {
+    const r = await t.fetch('/public/app.js');
+    expect(r.status).toBe(200);
+    expect(r.headers.get('content-type')).toContain('javascript');
+    expect(r.headers.get('cache-control')).toBe('public, max-age=60');
+    expect(r.headers.get('etag')).toMatch(/^W\//);
+    expect(await r.text()).toBe('console.log(1)');
+
+    const etag = r.headers.get('etag')!;
+    const cached = await t.fetch('/public/app.js', { headers: { 'if-none-match': etag } });
+    expect(cached.status).toBe(304);
+  });
+
+  it('serves directory indexes and redirects bare directories', async () => {
+    expect(await (await t.fetch('/public/')).text()).toBe('<h1>home</h1>');
+    const redirect = await t.fetch('/public/docs', { redirect: 'manual' });
+    expect(redirect.status).toBe(301);
+    expect(redirect.headers.get('location')).toBe('/public/docs/');
+    expect(await (await t.fetch('/public/docs/')).text()).toBe('docs home');
+  });
+
+  it('falls through to Nest for misses, blocks traversal and dotfiles', async () => {
+    expect((await t.fetch('/public/nope.txt')).status).toBe(404);
+    expect((await t.fetch('/public/..%2F..%2Fetc%2Fpasswd')).status).toBe(404);
+    expect((await t.fetch('/public/.secret')).status).toBe(404);
+    expect((await t.json('/')).body).toEqual({ root: true });
+  });
+});
+
+describe('lifecycle & cookies', () => {
+  it('listens on a random port, reports its URL, and closes', async () => {
+    const t = await bootstrap(RootModule);
+    expect(t.url).toMatch(/^http:\/\/(127\.0\.0\.1|\[::1\]|localhost):\d+$/);
+    expect((await t.json('/')).body).toEqual({ root: true });
+    await t.close();
+    await expect(fetch(t.url + '/')).rejects.toThrow();
+  });
+
+  it('sets multiple cookies as separate headers', async () => {
+    const t = await bootstrap(RootModule);
+    try {
+      const r = await t.fetch('/cookie');
+      const cookies = r.headers.getSetCookie();
+      expect(cookies).toHaveLength(2);
+      expect(cookies[0]).toBe('a=1; Path=/; HttpOnly; SameSite=Lax');
+      expect(cookies[1]).toMatch(/^b=two%20words; Max-Age=60; Path=\/; Expires=/);
+    } finally {
+      await t.close();
+    }
+  });
+
+  it('runs in-process with adapter.fetch() and no socket', async () => {
+    const adapter = new BunAdapter();
+    const moduleRef = await Test.createTestingModule({ imports: [RootModule] }).compile();
+    const app = moduleRef.createNestApplication(adapter, { logger: false });
+    await app.init();
+    try {
+      const res = await adapter.fetch(new Request('http://localhost/'));
+      expect(res.status).toBe(200);
+      expect(await res.json()).toEqual({ root: true });
+      const missing = await adapter.fetch(new Request('http://localhost/x', { method: 'DELETE' }));
+      expect(missing.status).toBe(404);
+    } finally {
+      await app.close();
+    }
+  });
+
+  it('forceCloseConnections drops in-flight requests on close', async () => {
+    const t = await bootstrap(RootModule, { app: { forceCloseConnections: true } });
+    // Capture the outcome immediately so the rejection is never unhandled.
+    const outcome = t.fetch('/slow').then(
+      () => 'resolved',
+      (err: Error) => err,
+    );
+    await Bun.sleep(20);
+    await t.close();
+    expect(await outcome).toBeInstanceOf(Error);
+  });
+
+  it('rejects listening twice on the same port with an error', async () => {
+    const a = await bootstrap(RootModule);
+    const port = new URL(a.url).port;
+    const adapter = new BunAdapter();
+    const moduleRef = await Test.createTestingModule({ imports: [RootModule] }).compile();
+    const app = moduleRef.createNestApplication(adapter, { logger: false });
+    try {
+      await expect(app.listen(Number(port))).rejects.toThrow();
+    } finally {
+      await app.close().catch(() => {});
+      await a.close();
+    }
+  });
+});

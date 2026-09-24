@@ -1,0 +1,37 @@
+# nestbun
+
+NestJS on the Bun runtime, natively.
+
+| Package | What | Status |
+|---|---|---|
+| [`@nestbun/platform`](./packages/platform) | HTTP adapter running Nest on `Bun.serve()` | ready |
+| `@nestbun/ws` | WebSocket gateway adapter on `Bun.serve({ websocket })` | planned |
+| [`create nest-bun`](https://github.com/mguay22/nest-bun) | `nest new`, but on Bun: `bun create mguay22/nest-bun my-api` | ready |
+
+```ts
+const app = await NestFactory.create<NestBunApplication>(AppModule, new BunAdapter());
+await app.listen(3000);
+```
+
+## Repo layout
+
+```
+packages/platform   the adapter (+ 44 integration tests against real Nest apps)
+examples/basic      minimal app: REST + Zod validation + SSE
+bench/              same app on express / fastify / bun adapters, one runtime
+apps/www            landing page
+```
+
+## Develop
+
+```bash
+bun install
+bun test packages               # adapter test suite
+bun run --filter '*' typecheck
+bun run bench                   # ~1 minute, prints a markdown table
+cd examples/basic && bun dev    # http://localhost:3000/cats
+```
+
+## License
+
+MIT
