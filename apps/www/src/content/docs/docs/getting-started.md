@@ -9,11 +9,7 @@ Requires **Bun 1.4 or newer** (`bun upgrade`) and **NestJS 12 or newer**.
 
 ```bash
 bun create @nestbun my-api --adapter bun
-cd my-api
-bun dev
 ```
-
-That gives you a NestJS 12 app already running on `Bun.serve()`: native ESM, no build step, `bun test` with a unit and an e2e spec, TypeScript for type-checking. Leave off `--adapter bun` to get the Express platform instead, the same shape as `nest new`.
 
 ## Add it to an existing project
 
