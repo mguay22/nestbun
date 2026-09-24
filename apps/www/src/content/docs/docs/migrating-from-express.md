@@ -16,7 +16,6 @@ Most apps migrate by changing one import. This page lists what to check.
 ```
 
 ```bash
-bun remove @nestjs/platform-express @types/express
 bun add @nestbun/platform
 ```
 
