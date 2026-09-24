@@ -48,7 +48,7 @@ await app.listen(3000);`;
     },
   }}
 >
-  <section class="hero-code">
+  <section class="hero-code band">
     <h3>Start a new project</h3>
     <Code code={'bun create @nestbun my-api --adapter bun\ncd my-api && bun dev'} lang="sh" />
 
@@ -82,7 +82,7 @@ await app.listen(3000);`;
     </CardGrid>
   </section>
 
-  <section>
+  <section class="band">
     <h2>Benchmarks</h2>
     <BenchChart />
     <p class="more"><a href={`${base}/docs/benchmarks/`}>Methodology and how to reproduce →</a></p>
@@ -121,7 +121,7 @@ await app.listen(3000);`;
     <p class="more"><a href={`${base}/docs/compatibility/`}>Full compatibility table →</a></p>
   </section>
 
-  <section class="starter">
+  <section class="starter band">
     <h2>Start from a Bun-native template</h2>
     <p class="lede">
       <code>@nestbun/create</code> is <code>nest new</code> for the Bun runtime: ESM, Zod validation,
@@ -138,12 +138,21 @@ await app.listen(3000);`;
 </StarlightPage>
 
 <style>
+  /* Each section is its own screen: generous vertical padding, alternating full-bleed bands. */
   section {
-    margin: 3.5rem auto 0;
+    position: relative;
+    margin: 0 auto;
     max-width: 62rem;
+    padding: 5rem 0;
   }
-  .hero-code {
-    margin-top: 1rem;
+  .band::before {
+    content: '';
+    position: absolute;
+    inset: 0 -100vw;
+    z-index: -1;
+    background: var(--sl-color-gray-6);
+    border-top: 1px solid var(--sl-color-hairline);
+    border-bottom: 1px solid var(--sl-color-hairline);
   }
   .hero-code h3 {
     font-size: 1.1rem;
@@ -165,7 +174,7 @@ await app.listen(3000);`;
     margin-top: 1rem;
   }
   .starter {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
   }
   .actions {
     display: flex;

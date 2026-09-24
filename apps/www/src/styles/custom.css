@@ -35,6 +35,16 @@
   transform: translateY(-1px);
 }
 
+/* Landing: hero fills the first screen; sections below are full-bleed bands. */
+html,
+body {
+  overflow-x: clip;
+}
+[data-has-hero] .hero {
+  min-height: calc(100svh - var(--sl-nav-height) - 5rem);
+  align-content: center;
+}
+
 /* Tighter code block under the landing page hero */
 .hero-code pre {
   font-size: 0.85rem;
