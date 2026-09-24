@@ -88,7 +88,7 @@
 
   <div class="hero">
     <div>
-      <span class="badge">v0.1 · NestJS 12 · Bun 1.3+</span>
+      <span class="badge">v0.1 · NestJS 12 · Bun 1.4+</span>
       <h1>NestJS on Bun, <em>natively.</em></h1>
       <p class="lede">An HTTP adapter that runs your Nest app straight on <code>Bun.serve()</code>. Swap one line, keep every controller, pipe, guard and filter, and drop the build step.</p>
       <div class="cta">
@@ -161,7 +161,7 @@
 
     <h3 class="doc-h">Install</h3>
     <pre><code>bun add @nestbun/platform @nestjs/common @nestjs/core reflect-metadata rxjs</code></pre>
-    <p class="doc-p">Requires Bun ≥ 1.3 and NestJS ≥ 12. Remove <code>@nestjs/platform-express</code> from your dependencies; nothing else in your app changes.</p>
+    <p class="doc-p">Requires Bun ≥ 1.4 and NestJS ≥ 12. Keep <code>experimentalDecorators</code> in your tsconfig (Bun 1.4 compiles TC39 decorators otherwise). Remove <code>@nestjs/platform-express</code> from your dependencies; nothing else in your app changes.</p>
 
     <h3 class="doc-h">Options</h3>
     <pre><code><span class="k">new</span> <span class="t">BunAdapter</span>({
