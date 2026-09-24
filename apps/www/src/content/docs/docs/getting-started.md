@@ -38,22 +38,6 @@ bun --watch src/main.ts
 
 The `NestBunApplication` type adds the platform methods (`useStaticAssets`, `setViewEngine`, `useBodyParser`) to `INestApplication`, the same way `NestExpressApplication` does for Express.
 
-## Validation with Zod
-
-NestJS 12 validates any [Standard Schema](https://standardschema.dev) natively, so Zod works without `class-validator` or `nestjs-zod`:
-
-```ts
-import { StandardSchemaValidationPipe } from '@nestjs/common';
-app.useGlobalPipes(new StandardSchemaValidationPipe());
-```
-
-```ts
-@Post()
-create(@Body({ schema: createCat }) dto: z.infer<typeof createCat>) {
-  return this.cats.create(dto);
-}
-```
-
 ## Start from a template
 
 If you are starting fresh, `@nestbun/create` is `nest new` for Bun. Pass `--adapter bun` to scaffold on `@nestbun/platform` directly:
