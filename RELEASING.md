@@ -19,7 +19,7 @@ bun publish --access public                 # creates @nestbun/platform on npm
 ## Every release after that
 
 ```bash
-# bump the version in whichever packages changed (packages/platform, packages/create-nest-bun), commit, then:
+# bump the version in whichever packages changed (packages/platform, packages/create), commit, then:
 git tag v0.1.1
 git push origin main --tags
 ```
@@ -28,7 +28,7 @@ git push origin main --tags
 
 ## The starter template
 
-`packages/create-nest-bun/templates/base` is the project `bun create nest-bun` generates; edit it directly. Bump `PLATFORM_VERSION` in `packages/create-nest-bun/src/scaffold.ts` when `@nestbun/platform` gets a new minor, and bump `create-nest-bun`'s own version so the release workflow publishes it.
+`packages/create/templates/base` is the project `bun create @nestbun` generates; edit it directly. Bump `PLATFORM_VERSION` in `packages/create/src/scaffold.ts` when `@nestbun/platform` gets a new minor, and bump `@nestbun/create`'s own version so the release workflow publishes it.
 
 ## Verify
 

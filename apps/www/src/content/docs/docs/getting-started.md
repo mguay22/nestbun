@@ -56,10 +56,10 @@ create(@Body({ schema: createCat }) dto: z.infer<typeof createCat>) {
 
 ## Start from a template
 
-If you are starting fresh, `create-nest-bun` is `nest new` for Bun. Pass `--adapter bun` to scaffold on `@nestbun/platform` directly:
+If you are starting fresh, `@nestbun/create` is `nest new` for Bun. Pass `--adapter bun` to scaffold on `@nestbun/platform` directly:
 
 ```bash
-bun create nest-bun my-api --adapter bun
+bun create @nestbun my-api --adapter bun
 cd my-api && bun dev
 ```
 

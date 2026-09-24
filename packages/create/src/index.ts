@@ -5,11 +5,11 @@ import pc from 'picocolors';
 import { scaffold, type Adapter } from './scaffold.js';
 
 const HELP = `
-${pc.bold('create-nest-bun')} — NestJS on the Bun runtime
+${pc.bold('@nestbun/create')} — NestJS on the Bun runtime
 
 ${pc.dim('Usage')}
-  bun create nest-bun [dir] [options]
-  bunx create-nest-bun [dir] [options]
+  bun create @nestbun [dir] [options]
+  bunx @nestbun/create [dir] [options]
 
 ${pc.dim('Options')}
   --adapter <express|bun>   HTTP platform. ${pc.dim('express')} matches nest new (default);
@@ -44,11 +44,11 @@ async function main(): Promise<void> {
   }
 
   const interactive = Boolean(process.stdout.isTTY) && !values.yes;
-  p.intro(pc.bgCyan(pc.black(' create-nest-bun ')));
+  p.intro(pc.bgCyan(pc.black(' @nestbun/create ')));
 
   let dir = positionals[0];
   if (!dir) {
-    if (!interactive) throw new Error('Missing project directory. Usage: bun create nest-bun my-api');
+    if (!interactive) throw new Error('Missing project directory. Usage: bun create @nestbun my-api');
     const answer = await p.text({
       message: 'Where should we create your project?',
       placeholder: './my-api',

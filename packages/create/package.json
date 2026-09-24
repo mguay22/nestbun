@@ -1,11 +1,11 @@
 {
-  "name": "create-nest-bun",
+  "name": "@nestbun/create",
   "version": "0.1.0",
-  "description": "Scaffold a NestJS project that runs on the Bun runtime: bun create nest-bun my-api",
+  "description": "Scaffold a NestJS project that runs on the Bun runtime: bun create @nestbun my-api",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "create-nest-bun": "./dist/index.js"
+    "nestbun-create": "./dist/index.js"
   },
   "files": ["dist", "templates", "README.md"],
   "scripts": {
@@ -15,7 +15,7 @@
     "prepublishOnly": "bun run build"
   },
   "keywords": ["nestjs", "bun", "create", "scaffold", "template", "starter"],
-  "repository": { "type": "git", "url": "git+https://github.com/mguay22/nestbun.git", "directory": "packages/create-nest-bun" },
+  "repository": { "type": "git", "url": "git+https://github.com/mguay22/nestbun.git", "directory": "packages/create" },
   "homepage": "https://mguay22.github.io/nestbun/",
   "bugs": "https://github.com/mguay22/nestbun/issues",
   "engines": { "bun": ">=1.4.0", "node": ">=20" },

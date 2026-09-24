@@ -42,11 +42,11 @@
         "zod": "4.6.5",
       },
     },
-    "packages/create-nest-bun": {
-      "name": "create-nest-bun",
+    "packages/create": {
+      "name": "@nestbun/create",
       "version": "0.1.0",
       "bin": {
-        "create-nest-bun": "./dist/index.js",
+        "nestbun-create": "./dist/index.js",
       },
       "dependencies": {
         "@clack/prompts": "^1.8.1",
@@ -302,6 +302,8 @@
 
     "@nestbun/bench": ["@nestbun/bench@workspace:bench"],
 
+    "@nestbun/create": ["@nestbun/create@workspace:packages/create"],
+
     "@nestbun/example-basic": ["@nestbun/example-basic@workspace:examples/basic"],
 
     "@nestbun/platform": ["@nestbun/platform@workspace:packages/platform"],
@@ -551,8 +553,6 @@
     "cookie-signature": ["cookie-signature@1.2.2", "", {}, "sha512-D76uU73ulSXrD1UXF4KE2TMxVVwhsnCgfAyTg9k8P6KGZjlXKrOLe4dJQKI3Bxi5wjesZoFXJWElNWBjPZMbhg=="],
 
     "cors": ["cors@2.8.6", "", { "dependencies": { "object-assign": "^4", "vary": "^1" } }, "sha512-tJtZBBHA6vjIAaF6EnIaq6laBBP9aq/Y3ouVJjEfoHbRBcHBAHYcMh/w8LDrk2PvIMMq8gmopa5D4V8RmbrxGw=="],
-
-    "create-nest-bun": ["create-nest-bun@workspace:packages/create-nest-bun"],
 
     "crossws": ["crossws@0.3.5", "", { "dependencies": { "uncrypto": "^0.1.3" } }, "sha512-ojKiDvcmByhwa8YYqbQI/hg7MEU0NC03+pSdEq4ZUnZR9xXpwk7E43SMNGkn+JxJGPFtNvQ48+vV2p+P1ml5PA=="],
 

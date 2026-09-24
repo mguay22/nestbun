@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { scaffold, type Adapter } from '../src/scaffold.js';
 
-const root = await mkdtemp(join(tmpdir(), 'create-nest-bun-'));
+const root = await mkdtemp(join(tmpdir(), 'nestbun-create-'));
 afterAll(() => rm(root, { recursive: true, force: true }));
 
 /** Generate, install, type-check, test, and boot the result. The real thing, not a snapshot. */
@@ -34,7 +34,7 @@ async function generateAndVerify(adapter: Adapter) {
   return { dir, pkg };
 }
 
-describe('create-nest-bun', () => {
+describe('@nestbun/create', () => {
   it('express (default) generates the same project as the nest-bun template', async () => {
     const { pkg } = await generateAndVerify('express');
     expect(pkg.dependencies['@nestjs/platform-express']).toBeDefined();

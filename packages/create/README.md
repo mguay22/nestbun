@@ -1,13 +1,13 @@
-# create-nest-bun
+# @nestbun/create
 
 `nest new`, but for the Bun runtime.
 
 ```bash
-bun create nest-bun my-api                 # Express platform, same shape as nest new
-bun create nest-bun my-api --adapter bun   # native Bun.serve() via @nestbun/platform
+bun create @nestbun my-api                 # Express platform, same shape as nest new
+bun create @nestbun my-api --adapter bun   # native Bun.serve() via @nestbun/platform
 ```
 
-Also works as `bunx create-nest-bun my-api` or `npx create-nest-bun my-api`.
+Also works as `bunx @nestbun/create my-api` or `npx @nestbun/create my-api`.
 
 ## What you get
 
