@@ -13,11 +13,8 @@ bun create @nestbun my-api --adapter bun
 
 ## Add it to an existing project
 
-Install the adapter and drop the Express platform:
-
 ```bash
 bun add @nestbun/platform
-bun remove @nestjs/platform-express @types/express
 ```
 
 Then pass it to `NestFactory.create()`. This is the only code change:
