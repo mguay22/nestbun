@@ -14,8 +14,22 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'nestbun',
-      description: 'NestJS on Bun, natively. An HTTP adapter that runs Nest on Bun.serve().',
+      description:
+        'nestbun is a NestJS adapter for Bun: run your Nest app natively on Bun.serve(), faster than Express and Fastify, with a one-line change.',
       logo: { src: './src/assets/logo.svg', alt: 'nestbun' },
+      head: [
+        { tag: 'meta', attrs: { property: 'og:image', content: `${site}${base}/og.png` } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+        { tag: 'meta', attrs: { property: 'og:site_name', content: 'nestbun' } },
+        { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: `${site}${base}/og.png` } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#17181c' } },
+        {
+          tag: 'meta',
+          attrs: { name: 'keywords', content: 'nestjs bun, nestjs bun adapter, run nestjs on bun, bun.serve nestjs, nestjs bun runtime' },
+        },
+      ],
       customCss: ['./src/styles/custom.css'],
       components: { SocialIcons: './src/components/SocialIcons.astro' },
       social: [

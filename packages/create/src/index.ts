@@ -17,7 +17,7 @@ ${pc.dim('Options')}
   --name <pkg>              package.json name (defaults to the directory name)
   --no-install              skip bun install
   --no-git                  skip git init
-  -y, --yes                 accept defaults, never prompt
+  --yes                     accept defaults, never prompt (-y works with bunx only)
   -f, --force               overwrite a non-empty directory
   -h, --help                show this help
 `;

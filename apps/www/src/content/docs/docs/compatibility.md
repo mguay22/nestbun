@@ -1,6 +1,6 @@
 ---
 title: Compatibility
-description: Which NestJS features and ecosystem packages work on the Bun adapter.
+description: NestJS Bun compatibility table. Which Nest features and ecosystem packages (swagger, testing, SSE, static files) work on the nestbun adapter.
 ---
 
 Every ✅ row has an integration test in `packages/platform/test` that boots a real Nest app on the adapter.

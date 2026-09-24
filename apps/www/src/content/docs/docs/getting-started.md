@@ -1,6 +1,6 @@
 ---
 title: Getting started
-description: Install @nestbun/platform and run a NestJS app on Bun.serve() in two minutes.
+description: Run NestJS on Bun in two minutes. Install the @nestbun/platform adapter and boot a Nest app on Bun.serve() with one line changed.
 ---
 
 ## Requirements

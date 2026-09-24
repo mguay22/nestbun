@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mguay22.github.io/nestbun/sitemap-index.xml

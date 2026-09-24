@@ -27,7 +27,7 @@ With `--adapter bun`, `src/main.ts` boots on `BunAdapter` from [`@nestbun/platfo
 | `--name <pkg>` | directory name | `package.json` name |
 | `--no-install` | | skip `bun install` |
 | `--no-git` | | skip `git init` |
-| `-y`, `--yes` | | accept defaults, never prompt |
+| `--yes` | | accept defaults, never prompt (`-y` only works via `bunx`; `bun create` rejects short flags) |
 | `-f`, `--force` | | overwrite a non-empty directory |
 
 ## How it works

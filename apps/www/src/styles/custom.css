@@ -24,10 +24,15 @@
 /* Header: keep the logo small and snug against the title */
 .site-title {
   gap: 0.6rem;
+  align-items: center;
 }
 .site-title img {
   height: 1.75rem;
   width: 1.75rem;
+}
+.site-title span {
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 /* Tighter code block under the landing page hero */

@@ -1,6 +1,6 @@
 ---
 title: Migrating from Express
-description: Move an existing NestJS application from @nestjs/platform-express to the Bun adapter.
+description: Migrate a NestJS app from Express to Bun. What changes when you swap @nestjs/platform-express for the nestbun adapter, and what to check.
 ---
 
 Most apps migrate by changing one import. This page lists what to check.

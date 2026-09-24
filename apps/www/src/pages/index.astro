@@ -4,6 +4,21 @@ import { Card, CardGrid, Code, LinkButton } from '@astrojs/starlight/components'
 import BenchChart from '../components/BenchChart.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const site = 'https://mguay22.github.io';
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: 'nestbun',
+  description: 'A NestJS adapter for Bun that runs Nest applications natively on Bun.serve().',
+  url: `${site}${base}/`,
+  codeRepository: 'https://github.com/mguay22/nestbun',
+  programmingLanguage: 'TypeScript',
+  runtimePlatform: 'Bun',
+  license: 'https://opensource.org/licenses/MIT',
+  author: { '@type': 'Person', name: 'Michael Guay', url: 'https://github.com/mguay22' },
+  keywords: 'NestJS, Bun, adapter, Bun.serve, HTTP',
+});
 
 const hero = `import { NestFactory } from '@nestjs/core';
 import { BunAdapter, type NestBunApplication } from '@nestbun/platform';
@@ -17,11 +32,15 @@ await app.listen(3000);`;
 
 <StarlightPage
   frontmatter={{
-    title: 'NestJS on Bun, natively',
+    title: 'Run NestJS on Bun, natively',
+    description:
+      'nestbun is a NestJS adapter for Bun. Run your Nest app on Bun.serve() with a one-line change: faster than Express and Fastify, no build step, full Nest compatibility.',
     template: 'splash',
+    head: [{ tag: 'script', attrs: { type: 'application/ld+json' }, content: jsonLd }],
     hero: {
+      title: 'NestJS on Bun, natively',
       tagline:
-        'An HTTP adapter that runs your Nest app straight on Bun.serve(). Swap one line, keep every controller, pipe, guard and filter, and drop the build step.',
+        'A NestJS Bun adapter that runs your app straight on Bun.serve(). Swap one line, keep every controller, pipe, guard and filter, and drop the build step.',
       actions: [
         { text: 'Get started', link: `${base}/docs/getting-started/`, icon: 'right-arrow', variant: 'primary' },
         { text: 'View on GitHub', link: 'https://github.com/mguay22/nestbun', icon: 'github', variant: 'minimal' },
@@ -31,9 +50,8 @@ await app.listen(3000);`;
 >
   <section class="hero-code">
     <Code code={hero} lang="ts" title="src/main.ts" />
-    <p class="run">
-      <code>bun add @nestbun/platform</code> · <code>bun src/main.ts</code> · no <code>nest build</code>, no <code>dist/</code>
-    </p>
+    <p class="run">Or start a new project with it already wired up:</p>
+    <Code code="bun create @nestbun my-api --adapter bun" lang="sh" />
   </section>
 
   <section>
@@ -125,10 +143,9 @@ await app.listen(3000);`;
     margin-top: 1rem;
   }
   .run {
-    text-align: center;
     color: var(--sl-color-gray-3);
     font-size: 0.9rem;
-    margin-top: 0.75rem;
+    margin: 1.25rem 0 0.5rem;
   }
   h2 {
     font-size: 1.75rem;
