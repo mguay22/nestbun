@@ -19,10 +19,24 @@ bun publish --access public                 # creates @nestbun/platform on npm
 ## Every release after that
 
 ```bash
-# bump version in packages/platform/package.json, commit, then:
+# bump the version in whichever packages changed (packages/platform, packages/create-nest-bun), commit, then:
 git tag v0.1.1
-git push origin main --tags                 # release.yml tests, builds, publishes, drafts a GitHub release
+git push origin main --tags
 ```
+
+`release.yml` runs the tests, builds every package, and publishes each one whose version is not on npm yet (`scripts/publish.ts`), then drafts a GitHub release.
+
+## Keeping the template repo in sync
+
+`packages/create-nest-bun/templates/base` is the source of truth for the starter. After changing it:
+
+```bash
+cd packages/create-nest-bun
+bun run sync-template --dry-run   # review
+bun run sync-template             # commit + push to github.com/mguay22/nest-bun
+```
+
+Bump `PLATFORM_VERSION` in `packages/create-nest-bun/src/scaffold.ts` when `@nestbun/platform` gets a new minor.
 
 ## Verify
 

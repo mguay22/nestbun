@@ -1,6 +1,6 @@
 {
   "name": "@nestbun/platform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NestJS HTTP adapter for the Bun runtime \u2014 run Nest on Bun.serve instead of Express",
   "license": "MIT",
   "type": "module",

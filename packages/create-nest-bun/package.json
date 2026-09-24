@@ -1,0 +1,30 @@
+{
+  "name": "create-nest-bun",
+  "version": "0.1.0",
+  "description": "Scaffold a NestJS project that runs on the Bun runtime: bun create nest-bun my-api",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-nest-bun": "./dist/index.js"
+  },
+  "files": ["dist", "templates", "README.md"],
+  "scripts": {
+    "build": "rm -rf dist && bun build src/index.ts --target=node --outdir dist --banner '#!/usr/bin/env node' && chmod +x dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test test",
+    "sync-template": "bun run scripts/sync-template.ts",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": ["nestjs", "bun", "create", "scaffold", "template", "starter"],
+  "repository": { "type": "git", "url": "git+https://github.com/mguay22/nestbun.git", "directory": "packages/create-nest-bun" },
+  "homepage": "https://mguay22.github.io/nestbun/",
+  "bugs": "https://github.com/mguay22/nestbun/issues",
+  "engines": { "bun": ">=1.4.0", "node": ">=20" },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0"
+  }
+}

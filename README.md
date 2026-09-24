@@ -6,7 +6,8 @@ NestJS on the Bun runtime, natively.
 |---|---|---|
 | [`@nestbun/platform`](./packages/platform) | HTTP adapter running Nest on `Bun.serve()` | ready |
 | `@nestbun/ws` | WebSocket gateway adapter on `Bun.serve({ websocket })` | planned |
-| [`create nest-bun`](https://github.com/mguay22/nest-bun) | `nest new`, but on Bun: `bun create mguay22/nest-bun my-api` | ready |
+| [`create-nest-bun`](./packages/create-nest-bun) | `nest new`, but on Bun: `bun create nest-bun my-api [--adapter bun]` | ready |
+| [`mguay22/nest-bun`](https://github.com/mguay22/nest-bun) | the same starter as a plain template repo: `bun create mguay22/nest-bun my-api` | ready |
 
 ```ts
 const app = await NestFactory.create<NestBunApplication>(AppModule, new BunAdapter());
@@ -17,6 +18,7 @@ await app.listen(3000);
 
 ```
 packages/platform   the adapter (+ 44 integration tests against real Nest apps)
+packages/create-nest-bun   the generator; templates/base is synced to the nest-bun template repo
 examples/basic      minimal app: REST + Zod validation + SSE
 bench/              same app on express / fastify / bun adapters, one runtime
 apps/www            landing page + docs (Astro + Starlight) → https://mguay22.github.io/nestbun/

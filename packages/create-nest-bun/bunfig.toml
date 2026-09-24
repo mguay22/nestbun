@@ -1,0 +1,3 @@
+# Only scan ./test; templates/ contains *.test.ts files that belong to generated projects.
+[test]
+root = "test"

@@ -279,7 +279,9 @@ export function stripPort(host: string): string {
 export function hasBody(req: BunRequest): boolean {
   if (req.headers['transfer-encoding'] !== undefined) return true;
   const len = req.headers['content-length'];
-  return len !== undefined && !Number.isNaN(Number(len)) && Number(len) > 0;
+  if (len !== undefined) return !Number.isNaN(Number(len)) && Number(len) > 0;
+  // In-process requests (adapter.fetch) carry no Content-Length; trust the Web Request.
+  return req.native.body !== null;
 }
 
 /** Strip parameters from a Content-Type value. */

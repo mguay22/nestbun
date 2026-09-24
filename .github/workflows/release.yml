@@ -1,6 +1,6 @@
 name: Release
-# Publishes @nestbun/platform to npm when a tag like v0.1.0 is pushed.
-# Requires an NPM_TOKEN repository secret (npm → Access Tokens → Granular, publish scope).
+# Publishes every public package under packages/* whose version is not on npm yet,
+# when a tag like v0.1.1 is pushed. Requires an NPM_TOKEN repository secret.
 on:
   push:
     tags: ['v*']
@@ -14,11 +14,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
-      - run: bun test packages
-      - run: bun run --filter '@nestbun/platform' build
-      - name: Publish
-        working-directory: packages/platform
-        run: bun publish --access public
+      - run: bun run test
+      - run: bun run build
+      - name: Publish changed packages
+        run: bun run scripts/publish.ts
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: GitHub release

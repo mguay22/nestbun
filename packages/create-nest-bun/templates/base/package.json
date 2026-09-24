@@ -1,0 +1,40 @@
+{
+  "name": "nest-bun",
+  "version": "0.0.1",
+  "description": "NestJS on the Bun runtime \u2014 no build step",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/main.ts",
+    "start": "bun src/main.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src test",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "g": "bunx @nestjs/cli g"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.1.0",
+    "@nestjs/core": "12.1.0",
+    "@nestjs/mapped-types": "12.0.0",
+    "@nestjs/platform-express": "12.1.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "12.1.0",
+    "@types/express": "5.0.6",
+    "bun-types": "1.4.2",
+    "oxlint": "1.85.0",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "bun": ">=1.4.0"
+  },
+  "bun-create": {
+    "start": "bun dev"
+  }
+}

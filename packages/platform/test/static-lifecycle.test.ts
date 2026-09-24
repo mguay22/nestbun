@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
-import { Controller, Get, Module, Res } from '@nestjs/common';
+import { Body, Controller, Get, Module, Post, Res } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -12,6 +12,10 @@ class RootController {
   @Get()
   root() {
     return { root: true };
+  }
+  @Post('echo')
+  echo(@Body() body: unknown) {
+    return { echo: body };
   }
   @Get('cookie')
   cookie(@Res() res: BunResponse) {
@@ -106,6 +110,16 @@ describe('lifecycle & cookies', () => {
       const res = await adapter.fetch(new Request('http://localhost/'));
       expect(res.status).toBe(200);
       expect(await res.json()).toEqual({ root: true });
+      // In-process requests have no Content-Length header; the body must still be parsed.
+      const posted = await adapter.fetch(
+        new Request('http://localhost/echo', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ a: 1 }),
+        }),
+      );
+      expect(posted.status).toBe(201);
+      expect(await posted.json()).toEqual({ echo: { a: 1 } });
       const missing = await adapter.fetch(new Request('http://localhost/x', { method: 'DELETE' }));
       expect(missing.status).toBe(404);
     } finally {

@@ -19,9 +19,9 @@ jobs:
         with:
           bun-version: ${{ matrix.bun }}
       - run: bun install --frozen-lockfile
-      - run: bun run --filter '@nestbun/platform' typecheck
-      - run: bun run --filter '@nestbun/platform' build
-      - run: bun test packages
+      - run: bun run typecheck
+      - run: bun run build
+      - run: bun run test
       - name: Example boots
         run: |
           cd examples/basic

@@ -8,9 +8,9 @@
     "bench"
   ],
   "scripts": {
-    "test": "bun test packages",
-    "typecheck": "bun run --filter '*' typecheck",
-    "build": "bun run --filter './packages/*' build"
+    "test": "bun test packages/platform packages/create-nest-bun/test",
+    "typecheck": "bun run --filter '@nestbun/platform' --filter 'create-nest-bun' --filter '@nestbun/example-basic' typecheck",
+    "build": "bun run --filter '@nestbun/platform' --filter 'create-nest-bun' build"
   },
   "devDependencies": {
     "typescript": "7.0.2",

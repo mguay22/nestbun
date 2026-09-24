@@ -7,7 +7,6 @@ description: Install @nestbun/platform and run a NestJS app on Bun.serve() in tw
 
 - **Bun 1.4 or newer** (`bun upgrade`).
 - **NestJS 12 or newer.**
-- A `tsconfig.json` with `experimentalDecorators` and `emitDecoratorMetadata`. Every Nest project already has these; Bun reads them to compile Nest's decorators. Bun resolves the tsconfig from the directory you run `bun` in, so a monorepo needs one at its root too.
 
 ## Install
 
@@ -57,12 +56,18 @@ create(@Body({ schema: createCat }) dto: z.infer<typeof createCat>) {
 
 ## Start from a template
 
-If you are starting fresh, the `nest-bun` template is `nest new` for Bun:
+If you are starting fresh, `create-nest-bun` is `nest new` for Bun. Pass `--adapter bun` to scaffold on `@nestbun/platform` directly:
 
 ```bash
-bun create mguay22/nest-bun my-api
+bun create nest-bun my-api --adapter bun
 cd my-api && bun dev
 ```
+
+Without the flag it prompts for the platform (Express by default, matching `nest new`). `bun create mguay22/nest-bun my-api` clones the same starter as a plain template with no options.
+
+## Troubleshooting
+
+**`TypeError: undefined is not an object (evaluating 'descriptor.value')` on startup.** Bun 1.4 did not find `experimentalDecorators` and compiled TC39 decorators instead. It reads `tsconfig.json` from the directory you run `bun` in, so in a monorepo add one at the root that extends your base config.
 
 ## Next steps
 

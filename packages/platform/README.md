@@ -20,7 +20,7 @@ That is the whole migration. Controllers, pipes, guards, interceptors, filters, 
 bun add @nestbun/platform
 ```
 
-Requires Bun ≥ 1.4 and NestJS ≥ 12. Your `tsconfig.json` must set `experimentalDecorators` and `emitDecoratorMetadata` (every Nest project already does); Bun 1.4 compiles TC39 decorators otherwise, and it reads the tsconfig from the directory you run `bun` in, so a monorepo needs one at its root too.
+Requires Bun ≥ 1.4 and NestJS ≥ 12. In a monorepo, keep a `tsconfig.json` at the root: Bun resolves it from the working directory, and without `experimentalDecorators` it compiles TC39 decorators, which Nest cannot use.
 
 ## Why
 

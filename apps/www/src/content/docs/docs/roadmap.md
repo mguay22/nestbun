@@ -10,7 +10,7 @@ description: What is planned for nestbun after the HTTP adapter.
 
 ## Later
 
-- `nest-bun` template option to scaffold with the Bun adapter as the default platform.
+- Make `--adapter bun` the default in `create-nest-bun` once `@nestbun/ws` and multipart land.
 - Backpressure on the streaming path (respect `ReadableStream` `desiredSize`).
 - `@nestjs/serve-static` and `@nestjs/graphql` compatibility passes.
 - HTTP/2 when `Bun.serve` exposes it.
