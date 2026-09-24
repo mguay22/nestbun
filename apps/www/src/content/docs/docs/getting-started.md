@@ -63,7 +63,7 @@ bun create nest-bun my-api --adapter bun
 cd my-api && bun dev
 ```
 
-Without the flag it prompts for the platform (Express by default, matching `nest new`). `bun create mguay22/nest-bun my-api` clones the same starter as a plain template with no options.
+Without the flag it prompts for the platform (Express by default, matching `nest new`). Add `-y` to skip prompts, `--no-install` or `--no-git` to skip those steps.
 
 ## Troubleshooting
 

@@ -19,8 +19,8 @@ jobs:
         with:
           bun-version: ${{ matrix.bun }}
       - run: bun install --frozen-lockfile
+      - run: bun run build # first: the example type-checks against the adapter's emitted declarations
       - run: bun run typecheck
-      - run: bun run build
       - run: bun run test
       - name: Example boots
         run: |

@@ -26,17 +26,9 @@ git push origin main --tags
 
 `release.yml` runs the tests, builds every package, and publishes each one whose version is not on npm yet (`scripts/publish.ts`), then drafts a GitHub release.
 
-## Keeping the template repo in sync
+## The starter template
 
-`packages/create-nest-bun/templates/base` is the source of truth for the starter. After changing it:
-
-```bash
-cd packages/create-nest-bun
-bun run sync-template --dry-run   # review
-bun run sync-template             # commit + push to github.com/mguay22/nest-bun
-```
-
-Bump `PLATFORM_VERSION` in `packages/create-nest-bun/src/scaffold.ts` when `@nestbun/platform` gets a new minor.
+`packages/create-nest-bun/templates/base` is the project `bun create nest-bun` generates; edit it directly. Bump `PLATFORM_VERSION` in `packages/create-nest-bun/src/scaffold.ts` when `@nestbun/platform` gets a new minor, and bump `create-nest-bun`'s own version so the release workflow publishes it.
 
 ## Verify
 

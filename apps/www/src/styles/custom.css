@@ -21,7 +21,7 @@
   --bench-bar-hi: #a8480a;
 }
 
-/* Tighter code blocks on the landing page hero */
+/* Tighter code block under the landing page hero */
 .hero-code pre {
   font-size: 0.85rem;
 }

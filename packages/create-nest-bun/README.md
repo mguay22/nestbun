@@ -30,6 +30,6 @@ With `--adapter bun`, `src/main.ts` boots on `BunAdapter` from [`@nestbun/platfo
 | `-y`, `--yes` | | accept defaults, never prompt |
 | `-f`, `--force` | | overwrite a non-empty directory |
 
-## Same template, two doors
+## How it works
 
-`bun create mguay22/nest-bun my-api` clones the [template repo](https://github.com/mguay22/nest-bun) directly (Express, no options). That repo is synced from this package's `templates/base`, so both produce the same project.
+`templates/base` is the project as generated. `--adapter bun` copies `templates/bun-adapter` on top (a `main.ts` and an e2e test that use `BunAdapter`) and swaps `@nestjs/platform-express` for `@nestbun/platform` in `package.json`. Nothing is templated with placeholders, so the base template is a runnable project you can open and edit directly.

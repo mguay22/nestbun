@@ -12,7 +12,6 @@
     "build": "rm -rf dist && bun build src/index.ts --target=node --outdir dist --banner '#!/usr/bin/env node' && chmod +x dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "bun test test",
-    "sync-template": "bun run scripts/sync-template.ts",
     "prepublishOnly": "bun run build"
   },
   "keywords": ["nestjs", "bun", "create", "scaffold", "template", "starter"],

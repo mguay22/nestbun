@@ -1,6 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import { Code, LinkButton } from '@astrojs/starlight/components';
+import { Card, CardGrid, Code, LinkButton } from '@astrojs/starlight/components';
 import BenchChart from '../components/BenchChart.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -13,18 +13,6 @@ const app = await NestFactory.create<NestBunApplication>(
   new BunAdapter(),
 );
 await app.listen(3000);`;
-
-const features = [
-  ['Routing', 'Params, wildcards, @All, HEAD → GET fallback, first-match order like Express.'],
-  ['Every decorator', '@Body, @Query, @Param, @Headers, @Ip, @Req, @Res, @Next, @Redirect, @Header, @HttpCode.'],
-  ['Body parsing', 'JSON and urlencoded by default, text and raw on request, rawBody, size limits with 413.'],
-  ['Middleware', 'MiddlewareConsumer, forRoutes, exclude, method scoping, app.use(), next(err).'],
-  ['Prefix & versioning', 'Global prefix with exclude; URI, header, media-type and custom versioning.'],
-  ['Streaming', 'Server-Sent Events with disconnect detection, StreamableFile, manual res.write().'],
-  ['Static & views', 'Zero-copy Bun.file() with ETag and 304; ejs, hbs, pug or a custom render().'],
-  ['Ecosystem', '@nestjs/swagger and @nestjs/testing work untouched. CORS via the cors package.'],
-  ['Lifecycle', 'HTTPS, graceful shutdown with drain timeout, forceCloseConnections, unix sockets.'],
-];
 ---
 
 <StarlightPage
@@ -54,26 +42,23 @@ const features = [
       You can, and it works. But every request pays for a Node compatibility layer. Going straight to Bun's native
       server removes it, and brings Web-standard primitives with it.
     </p>
-    <div class="cards">
-      <div class="card">
-        <h3>Faster than Express and Fastify</h3>
-        <p>Same app, same runtime, same machine: more requests per second on both JSON reads and JSON writes.</p>
-      </div>
-      <div class="card">
-        <h3>Web standards underneath</h3>
-        <p>
-          Requests are Web <code>Request</code>s, responses become Web <code>Response</code>s, files stream with
-          zero-copy <code>Bun.file()</code>. Express-shaped <code>req</code>/<code>res</code> keep the ecosystem working.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Tests without sockets</h3>
-        <p>
-          <code>adapter.fetch(new Request(...))</code> runs a request through the full Nest pipeline in-process. No
-          supertest, no port, no flakiness.
-        </p>
-      </div>
-    </div>
+    <CardGrid>
+      <Card title="Faster than Express and Fastify" icon="rocket">
+        Same app, same runtime, same machine: more requests per second on both JSON reads and JSON writes.
+      </Card>
+      <Card title="One-line migration" icon="approve-check">
+        Pass <code>new BunAdapter()</code> to <code>NestFactory.create()</code>. Controllers, pipes, guards, filters,
+        middleware and <code>@Res()</code> handlers stay as they are.
+      </Card>
+      <Card title="Web standards underneath" icon="puzzle">
+        Requests are Web <code>Request</code>s, responses become Web <code>Response</code>s, files stream with
+        zero-copy <code>Bun.file()</code>. Express-shaped <code>req</code>/<code>res</code> keep the ecosystem working.
+      </Card>
+      <Card title="Tests without sockets" icon="laptop">
+        <code>adapter.fetch(new Request(...))</code> runs a request through the full Nest pipeline in-process. No
+        supertest, no port, no flakiness.
+      </Card>
+    </CardGrid>
   </section>
 
   <section>
@@ -84,17 +69,34 @@ const features = [
 
   <section>
     <h2>What works today</h2>
-    <p class="lede">Every row is covered by an integration test that boots a real Nest application on the adapter.</p>
-    <div class="features">
-      {
-        features.map(([title, body]) => (
-          <div class="feature">
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </div>
-        ))
-      }
-    </div>
+    <p class="lede">Every item is covered by an integration test that boots a real Nest application on the adapter.</p>
+    <CardGrid>
+      <Card title="Routing and decorators" icon="random">
+        Params, wildcards, <code>@All</code>, HEAD → GET fallback, first-match order like Express. <code>@Body</code>,
+        <code>@Query</code>, <code>@Param</code>, <code>@Headers</code>, <code>@Ip</code>, <code>@Req</code>,
+        <code>@Res</code>, <code>@Next</code>, <code>@Redirect</code>, <code>@Header</code>, <code>@HttpCode</code>.
+      </Card>
+      <Card title="Body parsing" icon="document">
+        JSON and urlencoded by default, text and raw on request, <code>rawBody</code> for webhooks, size limits with
+        413, Express-identical 400 shapes for bad JSON.
+      </Card>
+      <Card title="Middleware, prefix, versioning" icon="setting">
+        <code>MiddlewareConsumer</code> with <code>forRoutes</code>, <code>exclude</code> and method scoping,
+        <code>app.use()</code>, <code>next(err)</code>, global prefix, URI / header / media-type versioning, CORS.
+      </Card>
+      <Card title="Streaming" icon="forward-slash">
+        Server-Sent Events with disconnect detection, <code>StreamableFile</code>, manual <code>res.write()</code>,
+        zero-copy file sends.
+      </Card>
+      <Card title="Static files and views" icon="open-book">
+        <code>useStaticAssets</code> with ETag, Last-Modified and 304; <code>ejs</code>, <code>hbs</code>,
+        <code>pug</code> or any <code>render()</code> function.
+      </Card>
+      <Card title="Ecosystem and lifecycle" icon="star">
+        <code>@nestjs/swagger</code> and <code>@nestjs/testing</code> untouched. HTTPS, graceful shutdown with a drain
+        timeout, <code>forceCloseConnections</code>, unix sockets.
+      </Card>
+    </CardGrid>
     <p class="more"><a href={`${base}/docs/compatibility/`}>Full compatibility table →</a></p>
   </section>
 
@@ -107,7 +109,9 @@ const features = [
     <Code code={'bun create nest-bun my-api --adapter bun\ncd my-api && bun dev'} lang="sh" />
     <div class="actions">
       <LinkButton href={`${base}/docs/getting-started/`} icon="right-arrow">Read the docs</LinkButton>
-      <LinkButton href="https://github.com/mguay22/nest-bun" variant="secondary" icon="github">Template repo</LinkButton>
+      <LinkButton href="https://github.com/mguay22/nestbun/tree/main/packages/create-nest-bun" variant="secondary" icon="github">
+        Generator source
+      </LinkButton>
     </div>
   </section>
 </StarlightPage>
@@ -134,48 +138,6 @@ const features = [
     color: var(--sl-color-gray-2);
     max-width: 44rem;
     margin: 0 0 1.5rem;
-  }
-  .cards,
-  .features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  @media (max-width: 760px) {
-    .cards,
-    .features {
-      grid-template-columns: 1fr;
-    }
-  }
-  /* Starlight's markdown styles add margin-top to non-first children; grids must stay aligned. */
-  .cards > *,
-  .features > *,
-  .card > *,
-  .feature > * {
-    margin-top: 0 !important;
-  }
-  .card h3,
-  .feature h3 {
-    margin-bottom: 0.4rem !important;
-  }
-  .card,
-  .feature {
-    background: var(--sl-color-gray-6);
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 12px;
-    padding: 1.1rem 1.25rem;
-  }
-  .card h3,
-  .feature h3 {
-    font-size: 1rem;
-    margin: 0 0 0.4rem;
-  }
-  .card p,
-  .feature p {
-    margin: 0;
-    color: var(--sl-color-gray-2);
-    font-size: 0.9rem;
-    line-height: 1.5;
   }
   .more {
     margin-top: 1rem;

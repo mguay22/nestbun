@@ -13,8 +13,8 @@
     "build": "bun run --filter '@nestbun/platform' --filter 'create-nest-bun' build"
   },
   "devDependencies": {
-    "typescript": "7.0.2",
     "bun-types": "1.4.2",
-    "prettier": "3.9.9"
+    "prettier": "3.9.9",
+    "typescript": "7.0.2"
   }
 }
