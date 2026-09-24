@@ -1,51 +1,47 @@
 ---
 title: Getting started
-description: Run NestJS on Bun in two minutes. Install the @nestbun/platform adapter and boot a Nest app on Bun.serve() with one line changed.
+description: Run NestJS on Bun in two minutes. Start a new project with @nestbun/create, or add the @nestbun/platform adapter to an existing Nest app with one line changed.
 ---
 
-## Requirements
+Requires **Bun 1.4 or newer** (`bun upgrade`) and **NestJS 12 or newer**.
 
-- **Bun 1.4 or newer** (`bun upgrade`).
-- **NestJS 12 or newer.**
-
-## Install
+## Start a new project
 
 ```bash
-bun add @nestbun/platform @nestjs/common @nestjs/core reflect-metadata rxjs
+bun create @nestbun my-api --adapter bun
+cd my-api
+bun dev
 ```
 
-You can remove `@nestjs/platform-express` from an existing project. Nothing else in the app changes.
+That gives you a NestJS 12 app already running on `Bun.serve()`: native ESM, no build step, `bun test` with a unit and an e2e spec, TypeScript for type-checking. Leave off `--adapter bun` to get the Express platform instead, the same shape as `nest new`.
 
-## Bootstrap
+## Add it to an existing project
+
+Install the adapter and drop the Express platform:
+
+```bash
+bun add @nestbun/platform
+bun remove @nestjs/platform-express @types/express
+```
+
+Then pass it to `NestFactory.create()`. This is the only code change:
 
 ```ts title="src/main.ts"
-import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { BunAdapter, type NestBunApplication } from '@nestbun/platform';
 import { AppModule } from './app.module.js';
 
 const app = await NestFactory.create<NestBunApplication>(AppModule, new BunAdapter());
-app.enableCors();
-app.enableShutdownHooks();
 await app.listen(3000);
 ```
 
-Run it directly, no build step:
+Run it directly, no `nest build`:
 
 ```bash
 bun --watch src/main.ts
 ```
 
-The `NestBunApplication` type adds the platform methods (`useStaticAssets`, `setViewEngine`, `useBodyParser`) to `INestApplication`, the same way `NestExpressApplication` does for Express.
-
-## Start from a template
-
-If you are starting fresh, `@nestbun/create` is `nest new` for Bun. Pass `--adapter bun` to scaffold on `@nestbun/platform` directly:
-
-```bash
-bun create @nestbun my-api --adapter bun
-cd my-api && bun dev
-```
+The `NestBunApplication` type adds the platform methods (`useStaticAssets`, `setViewEngine`, `useBodyParser`) to `INestApplication`, the same way `NestExpressApplication` does for Express. See [Migrating from Express](../migrating-from-express/) for the handful of things worth checking in a larger app.
 
 ## Troubleshooting
 
@@ -53,6 +49,6 @@ cd my-api && bun dev
 
 ## Next steps
 
-- [Migrating from Express](../migrating-from-express/) if you have an existing app.
 - [Configuration](../configuration/) for adapter and `Bun.serve()` options.
 - [Testing without a port](../testing/) to drop supertest.
+- [Compatibility](../compatibility/) for what works and what is planned.
