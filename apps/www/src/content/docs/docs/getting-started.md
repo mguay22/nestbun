@@ -47,8 +47,6 @@ bun create @nestbun my-api --adapter bun
 cd my-api && bun dev
 ```
 
-Without the flag it prompts for the platform (Express by default, matching `nest new`). Add `-y` to skip prompts, `--no-install` or `--no-git` to skip those steps.
-
 ## Troubleshooting
 
 **`TypeError: undefined is not an object (evaluating 'descriptor.value')` on startup.** Bun 1.4 did not find `experimentalDecorators` and compiled TC39 decorators instead. It reads `tsconfig.json` from the directory you run `bun` in, so in a monorepo add one at the root that extends your base config.
