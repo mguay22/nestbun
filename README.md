@@ -19,7 +19,7 @@ await app.listen(3000);
 packages/platform   the adapter (+ 44 integration tests against real Nest apps)
 examples/basic      minimal app: REST + Zod validation + SSE
 bench/              same app on express / fastify / bun adapters, one runtime
-apps/www            landing page
+apps/www            landing page + docs (Astro + Starlight) → https://mguay22.github.io/nestbun/
 ```
 
 ## Develop

@@ -2,6 +2,8 @@
 
 Run [NestJS](https://nestjs.com) directly on [`Bun.serve()`](https://bun.com/docs/api/http). No Express, no `node:http`, no build step.
 
+**Docs:** https://mguay22.github.io/nestbun/docs/getting-started/
+
 ```ts
 import { NestFactory } from '@nestjs/core';
 import { BunAdapter, type NestBunApplication } from '@nestbun/platform';

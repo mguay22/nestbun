@@ -1,0 +1,27 @@
+/* Starlight theme: warm accent that reads on both surfaces. */
+:root {
+  --sl-color-accent-low: #3a2a10;
+  --sl-color-accent: #d99a2b;
+  --sl-color-accent-high: #f5d6a3;
+  --sl-font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  --sl-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Benchmark chart (validated for the dark surface) */
+  --bench-bar: #4a78d8;
+  --bench-bar-hi: #bf8520;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #fbeacb;
+  --sl-color-accent: #a8480a;
+  --sl-color-accent-high: #5a2a04;
+
+  /* Benchmark chart (validated for the light surface) */
+  --bench-bar: #2f5fc4;
+  --bench-bar-hi: #a8480a;
+}
+
+/* Tighter code blocks on the landing page hero */
+.hero-code pre {
+  font-size: 0.85rem;
+}

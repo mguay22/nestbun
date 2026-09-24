@@ -1,0 +1,206 @@
+---
+/**
+ * Small-multiple bar chart: one panel per scenario, one bar per adapter.
+ * Single series per panel (no legend needed); the nestbun bar is emphasized.
+ * Bars are HTML so labels wrap and the chart stays responsive.
+ */
+interface Row {
+  adapter: string;
+  get: number;
+  post: number;
+  highlight?: boolean;
+  note?: string;
+}
+
+const rows: Row[] = [
+  { adapter: 'platform-express', get: 93_449, post: 71_763 },
+  { adapter: 'platform-fastify', get: 116_358, post: 91_533 },
+  { adapter: '@nestbun/platform', get: 119_022, post: 98_124, highlight: true },
+  { adapter: 'Bun.serve', get: 157_694, post: 153_660, note: 'no framework' },
+];
+
+const panels = [
+  { key: 'get', title: 'GET /users/:id', sub: 'JSON read' },
+  { key: 'post', title: 'POST /users', sub: 'JSON write, body parsed' },
+] as const;
+
+const max = Math.max(...rows.flatMap((r) => [r.get, r.post]));
+const fmt = (n: number) => `${Math.round(n / 1000)}k`;
+---
+
+<figure class="bench">
+  <div class="panels">
+    {
+      panels.map((p) => (
+        <div class="panel">
+          <h4>
+            {p.title} <span class="sub">{p.sub}</span>
+          </h4>
+          <ol class="rows">
+            {rows.map((r) => {
+              const value = r[p.key];
+              const pct = (value / max) * 100;
+              return (
+                <li class:list={['row', { hi: r.highlight }]} title={`${r.adapter}: ${value.toLocaleString()} req/s`}>
+                  <span class="label">
+                    {r.adapter}
+                    {r.note && <span class="note"> · {r.note}</span>}
+                  </span>
+                  <span class="track">
+                    <span class="bar" style={`width:${pct}%`} />
+                  </span>
+                  <span class="value">{fmt(value)}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+  <figcaption>
+    Requests per second, higher is better. One Nest controller, three adapters, one runtime. Apple M-series laptop, Bun 1.4,
+    64 connections, 3-second runs, load generator in a separate process. <code>bun run bench</code> reproduces it.
+  </figcaption>
+  <details class="table-view">
+    <summary>View as table</summary>
+    <table>
+      <thead>
+        <tr>
+          <th>Adapter</th>
+          <th>GET /users/:id</th>
+          <th>POST /users</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr>
+              <td>{r.adapter}</td>
+              <td>{r.get.toLocaleString()} req/s</td>
+              <td>{r.post.toLocaleString()} req/s</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </details>
+</figure>
+
+<style>
+  .bench {
+    margin: 0;
+  }
+  /* Starlight's markdown styles add margin-top to non-first children; keep the panels aligned. */
+  .panel,
+  .panel h4,
+  .rows,
+  .row,
+  .track,
+  .bar,
+  .label,
+  .value {
+    margin-top: 0 !important;
+  }
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 760px) {
+    .panels {
+      grid-template-columns: 1fr;
+    }
+  }
+  h4 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    color: var(--sl-color-white);
+  }
+  .sub {
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    margin-left: 0.25rem;
+  }
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 12.5rem) 1fr 3.25rem;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    padding: 0.125rem 0;
+    border-radius: 6px;
+  }
+  .row:hover {
+    background: var(--sl-color-gray-6);
+  }
+  .label {
+    color: var(--sl-color-gray-2);
+    font-family: var(--sl-font-mono);
+    font-size: 0.78rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .note {
+    color: var(--sl-color-gray-3);
+    font-family: var(--sl-font);
+  }
+  .track {
+    display: block;
+    height: 18px;
+    background: var(--sl-color-gray-6);
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+  }
+  .bar {
+    display: block;
+    height: 100%;
+    background: var(--bench-bar);
+    border-radius: 0 4px 4px 0;
+    transition: filter 120ms;
+  }
+  .row.hi .bar {
+    background: var(--bench-bar-hi);
+  }
+  .row:hover .bar {
+    filter: brightness(1.12);
+  }
+  .value {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--sl-color-white);
+    font-weight: 500;
+  }
+  .row.hi .label,
+  .row.hi .value {
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+  figcaption {
+    margin-top: 1rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .table-view {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .table-view summary {
+    cursor: pointer;
+    color: var(--sl-color-accent-high);
+  }
+  .table-view table {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+</style>
