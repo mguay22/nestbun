@@ -1,6 +1,6 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
-import { Card, CardGrid, Code } from '@astrojs/starlight/components';
+import { Card, CardGrid } from '@astrojs/starlight/components';
 import BenchChart from '../components/BenchChart.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -20,11 +20,6 @@ const jsonLd = JSON.stringify({
   keywords: 'NestJS, Bun, adapter, Bun.serve, HTTP',
 });
 
-const hero = `import { NestFactory } from '@nestjs/core';
-import { BunAdapter } from '@nestbun/platform';
-
-const app = await NestFactory.create(AppModule, new BunAdapter());
-await app.listen(3000);`;
 ---
 
 <StarlightPage
@@ -45,15 +40,6 @@ await app.listen(3000);`;
     },
   }}
 >
-  <section class="hero-code">
-    <h3>Start a new project</h3>
-    <Code code={'bun create @nestbun my-api --adapter bun\ncd my-api && bun dev'} lang="sh" />
-
-    <h3>Or add it to an existing project</h3>
-    <Code code="bun add @nestbun/platform" lang="sh" />
-    <Code code={hero} lang="ts" title="src/main.ts" />
-  </section>
-
   <section>
     <h2>Why not just run Express on Bun?</h2>
     <p class="lede">
@@ -136,16 +122,6 @@ await app.listen(3000);`;
     background: var(--sl-color-gray-6);
     border-top: 1px solid var(--sl-color-hairline);
     border-bottom: 1px solid var(--sl-color-hairline);
-  }
-  .hero-code h3 {
-    font-size: 1.15rem;
-    margin: 2rem 0 0.75rem;
-  }
-  .hero-code h3:first-child {
-    margin-top: 0;
-  }
-  .hero-code :global(.expressive-code + .expressive-code) {
-    margin-top: 0.75rem;
   }
   h2 {
     font-size: 1.75rem;
