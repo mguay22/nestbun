@@ -33,6 +33,11 @@ Every ✅ row has an integration test in `packages/platform/test` that boots a r
 |---|---|
 | `@nestjs/testing` | ✅ `createNestApplication(new BunAdapter())` |
 | `@nestjs/swagger` | ✅ UI, JSON, YAML and assets |
+| `@nestjs/throttler` | ✅ `ThrottlerGuard`, `X-RateLimit-*` / `Retry-After` headers, `@SkipThrottle()` |
+| `@nestjs/terminus` | ✅ `@HealthCheck()`: 200 when up, 503 with details when down |
+| `@nestjs/passport` + `passport-jwt` | ✅ `AuthGuard('jwt')`, `req.user` |
+| `helmet` | ✅ `app.use(helmet())` |
+| `cookie-parser` | ✅ `app.use(cookieParser(secret))`, `req.cookies` / `req.signedCookies` |
 | `cors` | ✅ used internally |
 | `@nestjs/serve-static` | ⚠️ untested; use `useStaticAssets` |
 | `@nestjs/platform-socket.io`, `@nestjs/platform-ws` | ❌ attach to a Node server; wait for `@nestbun/ws` |
