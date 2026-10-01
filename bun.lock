@@ -49,7 +49,7 @@
     },
     "packages/create": {
       "name": "@nestbun/create",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "bin": {
         "nestbun-create": "./dist/index.js",
       },
@@ -63,7 +63,7 @@
     },
     "packages/platform": {
       "name": "@nestbun/platform",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "dependencies": {
         "cors": "^2.8.6",
         "path-to-regexp": "^8.4.2",

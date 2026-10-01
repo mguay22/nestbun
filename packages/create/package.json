@@ -1,6 +1,6 @@
 {
   "name": "@nestbun/create",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Scaffold a NestJS project that runs on the Bun runtime: bun create @nestbun my-api",
   "license": "MIT",
   "type": "module",
