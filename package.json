@@ -10,11 +10,28 @@
   "scripts": {
     "test": "bun test packages/platform packages/create/test",
     "typecheck": "bun run --filter '@nestbun/platform' --filter '@nestbun/create' --filter '@nestbun/example-basic' typecheck",
-    "build": "bun run --filter '@nestbun/platform' --filter '@nestbun/create' build"
+    "build": "bun run --filter '@nestbun/platform' --filter '@nestbun/create' --filter '@nestbun/www' build",
+    "lint": "oxlint --deny-warnings",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "release": "bun run scripts/release.ts"
   },
   "devDependencies": {
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
     "bun-types": "1.4.2",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "oxlint": "1.85.0",
     "prettier": "3.9.9",
     "typescript": "7.0.2"
+  },
+  "lint-staged": {
+    "*.{ts,mts,mjs,js}": [
+      "oxlint --deny-warnings",
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml,css,astro}": "prettier --write --ignore-unknown"
   }
 }

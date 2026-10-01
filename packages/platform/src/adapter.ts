@@ -103,7 +103,7 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
         cert: https.cert as string,
         ca: https.ca as string,
         passphrase: https.passphrase as string,
-        ...(serve.tls ?? {}),
+        ...serve.tls,
       };
     }
     this.httpServer = new BunHttpServer(this.fetch, serve);
@@ -114,7 +114,10 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
   override listen(port: string | number, callback?: () => void): void;
   override listen(port: string | number, hostname: string, callback?: () => void): void;
   override listen(port: string | number, ...args: unknown[]): void {
-    const callback = typeof args[args.length - 1] === 'function' ? (args.pop() as (err?: Error) => void) : undefined;
+    const callback =
+      typeof args[args.length - 1] === 'function'
+        ? (args.pop() as (err?: Error) => void)
+        : undefined;
     const hostname = typeof args[0] === 'string' ? args[0] : undefined;
     this.httpServer.listen(port, hostname, callback);
   }
@@ -164,9 +167,11 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
     if (
       typeof contentType === 'string' &&
       !contentType.startsWith('application/json') &&
-      (body as { statusCode?: number })?.statusCode! >= HttpStatus.BAD_REQUEST
+      ((body as { statusCode?: number })?.statusCode ?? 0) >= HttpStatus.BAD_REQUEST
     ) {
-      this.logger.warn("Content-Type doesn't match Reply body, you might need a custom ExceptionFilter for non-JSON responses");
+      this.logger.warn(
+        "Content-Type doesn't match Reply body, you might need a custom ExceptionFilter for non-JSON responses",
+      );
       response.setHeader('Content-Type', 'application/json');
     }
     if (Buffer.isBuffer(body) || body instanceof Uint8Array) return response.send(body);
@@ -234,7 +239,9 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
     }
   }
 
-  override createMiddlewareFactory(requestMethod: RequestMethod): (path: string, callback: Function) => unknown {
+  override createMiddlewareFactory(
+    requestMethod: RequestMethod,
+  ): (path: string, callback: Function) => unknown {
     return (path, callback) => {
       try {
         const converted = LegacyRouteConverter.tryConvert(path);
@@ -278,7 +285,9 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
   }
 
   useBodyParser(type: ParserType, rawBody?: boolean, options: BodyParserOptions = {}): this {
-    this.router.use(createBodyParser(type, { limit: this.adapterOptions.bodyLimit, ...options, rawBody }));
+    this.router.use(
+      createBodyParser(type, { limit: this.adapterOptions.bodyLimit, ...options, rawBody }),
+    );
     return this;
   }
 
@@ -301,7 +310,11 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
     return this;
   }
 
-  override applyVersionFilter(handler: Function, version: VersionValue, versioningOptions: VersioningOptions) {
+  override applyVersionFilter(
+    handler: Function,
+    version: VersionValue,
+    versioningOptions: VersioningOptions,
+  ) {
     return applyVersionFilter(handler, version, versioningOptions) as never;
   }
 
@@ -320,6 +333,11 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
   }
 }
 
-function setIfMissing(res: BunResponse, name: string, value: string | string[] | number | undefined): void {
-  if (value !== undefined && res.getHeader(name) === undefined) res.setHeader(name, Array.isArray(value) ? value.join(',') : String(value));
+function setIfMissing(
+  res: BunResponse,
+  name: string,
+  value: string | string[] | number | undefined,
+): void {
+  if (value !== undefined && res.getHeader(name) === undefined)
+    res.setHeader(name, Array.isArray(value) ? value.join(',') : String(value));
 }

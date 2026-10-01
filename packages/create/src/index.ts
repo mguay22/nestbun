@@ -48,7 +48,8 @@ async function main(): Promise<void> {
 
   let dir = positionals[0];
   if (!dir) {
-    if (!interactive) throw new Error('Missing project directory. Usage: bun create @nestbun my-api');
+    if (!interactive)
+      throw new Error('Missing project directory. Usage: bun create @nestbun my-api');
     const answer = await p.text({
       message: 'Where should we create your project?',
       placeholder: './my-api',
@@ -69,8 +70,16 @@ async function main(): Promise<void> {
       const answer = await p.select<Adapter>({
         message: 'HTTP platform',
         options: [
-          { value: 'express', label: 'Express', hint: 'same as nest new; runs on Bun through node:http' },
-          { value: 'bun', label: 'Bun.serve (native)', hint: '@nestbun/platform; fastest, no Express' },
+          {
+            value: 'express',
+            label: 'Express',
+            hint: 'same as nest new; runs on Bun through node:http',
+          },
+          {
+            value: 'bun',
+            label: 'Bun.serve (native)',
+            hint: '@nestbun/platform; fastest, no Express',
+          },
         ],
         initialValue: 'express',
       });
@@ -82,7 +91,9 @@ async function main(): Promise<void> {
   const s = p.spinner();
   s.start('Copying template');
   const result = await scaffold({ dir, name: values.name, adapter, force: values.force });
-  s.stop(`Created ${pc.cyan(result.name)} with the ${pc.cyan(adapter)} adapter (${result.files.length} files)`);
+  s.stop(
+    `Created ${pc.cyan(result.name)} with the ${pc.cyan(adapter)} adapter (${result.files.length} files)`,
+  );
 
   if (values.install) {
     s.start('Installing dependencies with bun');
@@ -99,7 +110,10 @@ async function main(): Promise<void> {
     }
   }
 
-  p.note([`cd ${dir}`, values.install ? '' : 'bun install', 'bun dev'].filter(Boolean).join('\n'), 'Next steps');
+  p.note(
+    [`cd ${dir}`, values.install ? '' : 'bun install', 'bun dev'].filter(Boolean).join('\n'),
+    'Next steps',
+  );
   p.outro(`Docs: ${pc.underline('https://mguay22.github.io/nestbun/')}`);
 }
 
@@ -112,7 +126,9 @@ function run(cmd: string, args: string[], cwd: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, args, { cwd, stdio: ['ignore', 'ignore', 'inherit'] });
     child.on('error', reject);
-    child.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`${cmd} ${args.join(' ')} exited with ${code}`))));
+    child.on('exit', (code) =>
+      code === 0 ? resolve() : reject(new Error(`${cmd} ${args.join(' ')} exited with ${code}`)),
+    );
   });
 }
 

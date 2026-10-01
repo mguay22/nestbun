@@ -50,7 +50,8 @@ export function serveStatic(root: string, options: StaticOptions = {}): RequestH
     } catch {
       return fallthrough ? next() : res.status(400).type('txt').send('Bad Request');
     }
-    if (decoded.includes('\0')) return fallthrough ? next() : res.status(400).type('txt').send('Bad Request');
+    if (decoded.includes('\0'))
+      return fallthrough ? next() : res.status(400).type('txt').send('Bad Request');
 
     const segments = decoded.split('/');
     if (dotfiles !== 'allow' && segments.some((s) => s.length > 1 && s.startsWith('.'))) {
@@ -65,7 +66,10 @@ export function serveStatic(root: string, options: StaticOptions = {}): RequestH
     if (info?.isDirectory()) {
       if (!index) return next();
       if (redirect && !req.path.endsWith('/')) {
-        return res.redirect(301, `${req.path}/${req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''}`);
+        return res.redirect(
+          301,
+          `${req.path}/${req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''}`,
+        );
       }
       filePath = join(filePath, index);
       info = await statSafe(filePath);
@@ -75,13 +79,18 @@ export function serveStatic(root: string, options: StaticOptions = {}): RequestH
     }
 
     const file = Bun.file(filePath);
-    const etag = useEtag ? `W/"${info.size.toString(16)}-${Math.floor(info.mtimeMs).toString(16)}"` : undefined;
+    const etag = useEtag
+      ? `W/"${info.size.toString(16)}-${Math.floor(info.mtimeMs).toString(16)}"`
+      : undefined;
     const lastModified = useLastModified ? new Date(info.mtimeMs).toUTCString() : undefined;
 
     if (etag) res.setHeader('ETag', etag);
     if (lastModified) res.setHeader('Last-Modified', lastModified);
     if (maxAgeSeconds !== undefined) {
-      res.setHeader('Cache-Control', `public, max-age=${maxAgeSeconds}${options.immutable ? ', immutable' : ''}`);
+      res.setHeader(
+        'Cache-Control',
+        `public, max-age=${maxAgeSeconds}${options.immutable ? ', immutable' : ''}`,
+      );
     }
     options.setHeaders?.(res, filePath);
 
@@ -116,11 +125,23 @@ function toSeconds(maxAge: number | string | undefined): number | undefined {
   if (!m) throw new TypeError(`Invalid maxAge: ${maxAge}`);
   const n = Number(m[1]);
   const unit = (m[2] ?? 'ms').toLowerCase();
-  const seconds = { ms: n / 1000, s: n, m: n * 60, h: n * 3600, d: n * 86400, w: n * 604800, y: n * 31557600 }[unit]!;
+  const seconds = {
+    ms: n / 1000,
+    s: n,
+    m: n * 60,
+    h: n * 3600,
+    d: n * 86400,
+    w: n * 604800,
+    y: n * 31557600,
+  }[unit]!;
   return Math.floor(seconds);
 }
 
-function isFresh(headers: Record<string, string>, etag: string | undefined, mtimeMs: number): boolean {
+function isFresh(
+  headers: Record<string, string>,
+  etag: string | undefined,
+  mtimeMs: number,
+): boolean {
   const noneMatch = headers['if-none-match'];
   if (noneMatch && etag) {
     return noneMatch.split(',').some((t) => t.trim() === etag || t.trim() === '*');

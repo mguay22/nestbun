@@ -7,18 +7,36 @@
   "bin": {
     "nestbun-create": "./dist/index.js"
   },
-  "files": ["dist", "templates", "README.md"],
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
   "scripts": {
     "build": "rm -rf dist && bun build src/index.ts --target=node --outdir dist --banner '#!/usr/bin/env node' && chmod +x dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "bun test test",
     "prepublishOnly": "bun run build"
   },
-  "keywords": ["nestjs", "bun", "create", "scaffold", "template", "starter"],
-  "repository": { "type": "git", "url": "git+https://github.com/mguay22/nestbun.git", "directory": "packages/create" },
+  "keywords": [
+    "nestjs",
+    "bun",
+    "create",
+    "scaffold",
+    "template",
+    "starter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mguay22/nestbun.git",
+    "directory": "packages/create"
+  },
   "homepage": "https://mguay22.github.io/nestbun/",
   "bugs": "https://github.com/mguay22/nestbun/issues",
-  "engines": { "bun": ">=1.4.0", "node": ">=20" },
+  "engines": {
+    "bun": ">=1.4.0",
+    "node": ">=20"
+  },
   "dependencies": {
     "@clack/prompts": "^1.8.1",
     "picocolors": "^1.1.1"

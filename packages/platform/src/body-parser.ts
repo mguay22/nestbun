@@ -27,7 +27,10 @@ const DEFAULT_TYPES: Record<ParserType, string[]> = {
 
 const DEFAULT_LIMIT = 100 * 1024;
 
-export function createBodyParser(kind: ParserType, options: BodyParserOptions = {}): RequestHandler {
+export function createBodyParser(
+  kind: ParserType,
+  options: BodyParserOptions = {},
+): RequestHandler {
   const limit = parseBytes(options.limit, DEFAULT_LIMIT);
   const matches = typeMatcher(options.type ?? DEFAULT_TYPES[kind]);
   const strict = options.strict ?? true;
@@ -47,14 +50,24 @@ export function createBodyParser(kind: ParserType, options: BodyParserOptions = 
   return parser;
 }
 
-function decode(kind: ParserType, bytes: Uint8Array, req: BunRequest, strict: boolean, defaultCharset?: string): unknown {
+function decode(
+  kind: ParserType,
+  bytes: Uint8Array,
+  req: BunRequest,
+  strict: boolean,
+  defaultCharset?: string,
+): unknown {
   if (kind === 'raw') return Buffer.from(bytes);
   const charset = charsetOf(req.headers['content-type']) ?? defaultCharset ?? 'utf-8';
   let text: string;
   try {
     text = new TextDecoder(charset, { fatal: kind !== 'text' }).decode(bytes);
   } catch {
-    throw new HttpError(415, `unsupported charset "${charset.toUpperCase()}"`, 'charset.unsupported');
+    throw new HttpError(
+      415,
+      `unsupported charset "${charset.toUpperCase()}"`,
+      'charset.unsupported',
+    );
   }
   switch (kind) {
     case 'text':
@@ -66,7 +79,11 @@ function decode(kind: ParserType, bytes: Uint8Array, req: BunRequest, strict: bo
       if (strict) {
         const first = text.trimStart()[0];
         if (first !== '{' && first !== '[') {
-          throw parseFailed(new SyntaxError(`Unexpected token '${first ?? ''}', "${text.slice(0, 20)}" is not valid JSON`));
+          throw parseFailed(
+            new SyntaxError(
+              `Unexpected token '${first ?? ''}', "${text.slice(0, 20)}" is not valid JSON`,
+            ),
+          );
         }
       }
       try {
@@ -86,9 +103,11 @@ function decode(kind: ParserType, bytes: Uint8Array, req: BunRequest, strict: bo
 export async function readBody(req: BunRequest, limit: number): Promise<Uint8Array> {
   const declared = req.headers['content-length'];
   if (declared !== undefined) {
-    if (Number(declared) > limit) throw new HttpError(413, 'request entity too large', 'entity.too.large');
+    if (Number(declared) > limit)
+      throw new HttpError(413, 'request entity too large', 'entity.too.large');
     const buf = new Uint8Array(await req.native.arrayBuffer());
-    if (buf.byteLength > limit) throw new HttpError(413, 'request entity too large', 'entity.too.large');
+    if (buf.byteLength > limit)
+      throw new HttpError(413, 'request entity too large', 'entity.too.large');
     return buf;
   }
   const body = req.native.body;
@@ -117,7 +136,9 @@ export async function readBody(req: BunRequest, limit: number): Promise<Uint8Arr
   return out;
 }
 
-function typeMatcher(type: string | string[] | ((req: BunRequest) => boolean)): (req: BunRequest) => boolean {
+function typeMatcher(
+  type: string | string[] | ((req: BunRequest) => boolean),
+): (req: BunRequest) => boolean {
   if (typeof type === 'function') return type;
   const types = Array.isArray(type) ? type : [type];
   return (req) => {

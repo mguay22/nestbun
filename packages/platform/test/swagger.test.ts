@@ -20,7 +20,10 @@ describe('@nestjs/swagger', () => {
   beforeAll(async () => {
     t = await bootstrap(PetsModule, {
       configure: (app) => {
-        const doc = SwaggerModule.createDocument(app, new DocumentBuilder().setTitle('Pets').setVersion('1').build());
+        const doc = SwaggerModule.createDocument(
+          app,
+          new DocumentBuilder().setTitle('Pets').setVersion('1').build(),
+        );
         SwaggerModule.setup('docs', app, doc);
       },
     });
@@ -42,7 +45,11 @@ describe('@nestjs/swagger', () => {
     expect(yaml.status).toBe(200);
     expect(await yaml.text()).toContain('title: Pets');
 
-    for (const asset of ['/docs/swagger-ui-bundle.js', '/docs/swagger-ui.css', '/docs/swagger-ui-init.js']) {
+    for (const asset of [
+      '/docs/swagger-ui-bundle.js',
+      '/docs/swagger-ui.css',
+      '/docs/swagger-ui-init.js',
+    ]) {
       const r = await t.fetch(asset);
       expect(r.status).toBe(200);
       expect((await r.arrayBuffer()).byteLength).toBeGreaterThan(100);

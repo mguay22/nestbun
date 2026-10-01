@@ -14,7 +14,8 @@ export class ViewRenderer {
   private dirs: string[] = [resolve('views')];
 
   setEngine(engine: ViewEngineOption | string): void {
-    this.engine = typeof engine === 'string' ? builtin(engine as 'ejs' | 'hbs' | 'handlebars' | 'pug') : engine;
+    this.engine =
+      typeof engine === 'string' ? builtin(engine as 'ejs' | 'hbs' | 'handlebars' | 'pug') : engine;
   }
 
   setDirs(dirs: string | string[]): void {
@@ -40,7 +41,9 @@ export class ViewRenderer {
 function builtin(name: 'ejs' | 'hbs' | 'handlebars' | 'pug'): ViewEngine {
   switch (name) {
     default:
-      throw new Error(`Unknown view engine "${name}". Pass an object with a render() method for custom engines.`);
+      throw new Error(
+        `Unknown view engine "${name}". Pass an object with a render() method for custom engines.`,
+      );
     case 'ejs':
       return {
         extension: 'ejs',

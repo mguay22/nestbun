@@ -27,7 +27,11 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'theme-color', content: '#17181c' } },
         {
           tag: 'meta',
-          attrs: { name: 'keywords', content: 'nestjs bun, nestjs bun adapter, run nestjs on bun, bun.serve nestjs, nestjs bun runtime' },
+          attrs: {
+            name: 'keywords',
+            content:
+              'nestjs bun, nestjs bun adapter, run nestjs on bun, bun.serve nestjs, nestjs bun runtime',
+          },
         },
       ],
       customCss: ['./src/styles/custom.css'],

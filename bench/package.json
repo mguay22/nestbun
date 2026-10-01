@@ -2,7 +2,9 @@
   "name": "@nestbun/bench",
   "private": true,
   "type": "module",
-  "scripts": { "bench": "bun run bench.ts" },
+  "scripts": {
+    "bench": "bun run bench.ts"
+  },
   "dependencies": {
     "@nestbun/platform": "workspace:*",
     "@nestjs/common": "12.1.0",

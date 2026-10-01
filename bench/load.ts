@@ -1,5 +1,10 @@
 // Child-process load generator: bun load.ts <url> <method> <seconds> <concurrency> → JSON on stdout
-const [url, method, secondsArg, concArg] = process.argv.slice(2) as [string, string, string, string];
+const [url, method, secondsArg, concArg] = process.argv.slice(2) as [
+  string,
+  string,
+  string,
+  string,
+];
 const seconds = Number(secondsArg);
 const concurrency = Number(concArg);
 const init: RequestInit =
@@ -27,5 +32,6 @@ await Promise.all(
   }),
 );
 latencies.sort((a, b) => a - b);
-const pct = (p: number) => latencies[Math.min(latencies.length - 1, Math.floor(latencies.length * p))] ?? 0;
+const pct = (p: number) =>
+  latencies[Math.min(latencies.length - 1, Math.floor(latencies.length * p))] ?? 0;
 console.log(JSON.stringify({ rps: count / seconds, p50: pct(0.5), p99: pct(0.99), errors }));
