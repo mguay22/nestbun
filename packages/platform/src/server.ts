@@ -1,7 +1,10 @@
 import { EventEmitter } from 'node:events';
 import type { Server, TLSOptions } from 'bun';
 
-export type FetchHandler = (request: Request, server: Server<unknown>) => Response | Promise<Response>;
+export type FetchHandler = (
+  request: Request,
+  server: Server<unknown>,
+) => Response | Promise<Response>;
 
 /** Options forwarded to `Bun.serve()`. */
 export interface BunServeOptions {

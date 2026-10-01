@@ -4,7 +4,12 @@ import type { BunResponse } from './response.js';
 
 export type NextFunction = (err?: unknown) => void;
 export type RequestHandler = (req: BunRequest, res: BunResponse, next: NextFunction) => unknown;
-export type ErrorRequestHandler = (err: unknown, req: BunRequest, res: BunResponse, next: NextFunction) => unknown;
+export type ErrorRequestHandler = (
+  err: unknown,
+  req: BunRequest,
+  res: BunResponse,
+  next: NextFunction,
+) => unknown;
 export type AnyHandler = RequestHandler | ErrorRequestHandler;
 
 interface Layer {
@@ -17,8 +22,22 @@ interface Layer {
 }
 
 const VERBS = [
-  'get', 'post', 'put', 'patch', 'delete', 'head', 'options',
-  'search', 'query', 'propfind', 'proppatch', 'mkcol', 'copy', 'move', 'lock', 'unlock',
+  'get',
+  'post',
+  'put',
+  'patch',
+  'delete',
+  'head',
+  'options',
+  'search',
+  'query',
+  'propfind',
+  'proppatch',
+  'mkcol',
+  'copy',
+  'move',
+  'lock',
+  'unlock',
 ] as const;
 type Verb = (typeof VERBS)[number];
 
@@ -58,7 +77,10 @@ export class Router {
   private add(method: string | null, path: string | null, handler: Function, end: boolean): void {
     if (typeof handler !== 'function') throw new TypeError('Router handlers must be functions');
     const matchAll = path === null || path === '/' || path === '';
-    const matcher = matchAll && !end ? null : match<Record<string, string>>(path ?? '/', { end, decode: decodeURIComponent });
+    const matcher =
+      matchAll && !end
+        ? null
+        : match<Record<string, string>>(path ?? '/', { end, decode: decodeURIComponent });
     this.layers.push({ method, path, matcher, handler, isError: handler.length === 4 });
   }
 
@@ -78,7 +100,12 @@ export class Router {
       while (index < layers.length) {
         const layer = layers[index++]!;
         if (layer.isError !== (err !== undefined && err !== null && err !== 'route')) continue;
-        if (layer.method && layer.method !== method && !(method === 'HEAD' && layer.method === 'GET')) continue;
+        if (
+          layer.method &&
+          layer.method !== method &&
+          !(method === 'HEAD' && layer.method === 'GET')
+        )
+          continue;
 
         if (layer.matcher) {
           let matched: ReturnType<typeof layer.matcher>;
@@ -98,7 +125,9 @@ export class Router {
             ? (layer.handler as ErrorRequestHandler)(err, req, res, next)
             : (layer.handler as RequestHandler)(req, res, next);
           if (result && typeof (result as Promise<unknown>).then === 'function') {
-            (result as Promise<unknown>).then(undefined, (asyncError) => next(asyncError ?? new Error('Handler rejected')));
+            (result as Promise<unknown>).then(undefined, (asyncError) =>
+              next(asyncError ?? new Error('Handler rejected')),
+            );
           }
         } catch (syncError) {
           next(syncError ?? new Error('Handler threw'));
@@ -113,26 +142,40 @@ export class Router {
 
   private finalNotFound(req: BunRequest, res: BunResponse): void {
     if (res.headersSent) return void res.end();
-    res.status(404).type('html').send(`Cannot ${req.method} ${escapeHtml(req.path)}`);
+    res
+      .status(404)
+      .type('html')
+      .send(`Cannot ${req.method} ${escapeHtml(req.path)}`);
   }
 
   private finalError(err: unknown, _req: BunRequest, res: BunResponse): void {
-    const status = (err as { status?: number; statusCode?: number })?.status ?? (err as { statusCode?: number })?.statusCode;
+    const status =
+      (err as { status?: number; statusCode?: number })?.status ??
+      (err as { statusCode?: number })?.statusCode;
     const code = typeof status === 'number' && status >= 400 && status < 600 ? status : 500;
     if (code >= 500) console.error(err);
     if (res.headersSent) return void res.end();
     const expose = code < 500 && err instanceof Error;
-    res.status(code).type('txt').send(expose ? err.message : code === 500 ? 'Internal Server Error' : String(code));
+    res
+      .status(code)
+      .type('txt')
+      .send(expose ? err.message : code === 500 ? 'Internal Server Error' : String(code));
   }
 }
 
 // Attach the verb methods (get/post/...) dynamically so the class stays short.
-type VerbMethod = { (handler: RequestHandler): Router; (path: string, handler: RequestHandler): Router };
+type VerbMethod = {
+  (handler: RequestHandler): Router;
+  (path: string, handler: RequestHandler): Router;
+};
 export interface Router extends Record<Verb, VerbMethod> {}
 for (const verb of VERBS) {
   Object.defineProperty(Router.prototype, verb, {
     value(this: Router, ...args: [RequestHandler] | [string, RequestHandler]) {
-      return (this as unknown as { route(m: string, a: unknown): Router }).route(verb.toUpperCase(), args);
+      return (this as unknown as { route(m: string, a: unknown): Router }).route(
+        verb.toUpperCase(),
+        args,
+      );
     },
     writable: true,
     configurable: true,
@@ -140,5 +183,8 @@ for (const verb of VERBS) {
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
+  );
 }

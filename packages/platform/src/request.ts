@@ -149,7 +149,9 @@ export class BunRequest extends Readable {
   }
 
   get protocol(): 'http' | 'https' {
-    const forwarded = this.trustProxy ? this.headers['x-forwarded-proto']?.split(',')[0]?.trim() : undefined;
+    const forwarded = this.trustProxy
+      ? this.headers['x-forwarded-proto']?.split(',')[0]?.trim()
+      : undefined;
     const proto = forwarded ?? (this.native.url.startsWith('https:') ? 'https' : 'http');
     return proto.toLowerCase() === 'https' ? 'https' : 'http';
   }
@@ -159,7 +161,9 @@ export class BunRequest extends Readable {
   }
 
   get host(): string {
-    const forwarded = this.trustProxy ? this.headers['x-forwarded-host']?.split(',')[0]?.trim() : undefined;
+    const forwarded = this.trustProxy
+      ? this.headers['x-forwarded-host']?.split(',')[0]?.trim()
+      : undefined;
     return forwarded ?? this.headers['host'] ?? hostOf(this.native.url);
   }
 

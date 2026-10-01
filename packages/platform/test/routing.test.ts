@@ -215,7 +215,9 @@ describe('routing', () => {
 
     const headGet = await t.fetch('/users/abc', { method: 'HEAD' });
     expect(headGet.status).toBe(200);
-    expect(headGet.headers.get('content-length')).toBe(String(JSON.stringify({ id: 'abc' }).length));
+    expect(headGet.headers.get('content-length')).toBe(
+      String(JSON.stringify({ id: 'abc' }).length),
+    );
     expect(await headGet.text()).toBe('');
   });
 
@@ -260,7 +262,11 @@ describe('routing', () => {
   it('exceptions: HttpException shapes, unknown errors, 404', async () => {
     const nf = await t.json('/users/missing');
     expect(nf.status).toBe(404);
-    expect(nf.body).toEqual({ statusCode: 404, message: 'User missing not found', error: 'Not Found' });
+    expect(nf.body).toEqual({
+      statusCode: 404,
+      message: 'User missing not found',
+      error: 'Not Found',
+    });
 
     const boom = await t.json('/users/boom');
     expect(boom.status).toBe(500);
@@ -272,7 +278,11 @@ describe('routing', () => {
 
     const unknown = await t.json('/nope');
     expect(unknown.status).toBe(404);
-    expect(unknown.body).toEqual({ statusCode: 404, message: 'Cannot GET /nope', error: 'Not Found' });
+    expect(unknown.body).toEqual({
+      statusCode: 404,
+      message: 'Cannot GET /nope',
+      error: 'Not Found',
+    });
   });
 
   it('primitive and buffer bodies', async () => {

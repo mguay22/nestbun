@@ -85,7 +85,10 @@ export class BunResponse extends Writable {
   setHeader(name: string, value: HeaderValue | number): this {
     this.assertHeadersNotSent();
     const key = name.toLowerCase();
-    this.headerMap.set(key, { name, value: Array.isArray(value) ? value.map(String) : String(value) });
+    this.headerMap.set(key, {
+      name,
+      value: Array.isArray(value) ? value.map(String) : String(value),
+    });
     return this;
   }
 
@@ -126,7 +129,11 @@ export class BunResponse extends Writable {
     return this;
   }
 
-  writeHead(statusCode: number, statusMessage?: string | Record<string, HeaderValue>, headers?: Record<string, HeaderValue>): this {
+  writeHead(
+    statusCode: number,
+    statusMessage?: string | Record<string, HeaderValue>,
+    headers?: Record<string, HeaderValue>,
+  ): this {
     if (typeof statusMessage === 'object') {
       headers = statusMessage;
       statusMessage = undefined;
@@ -168,7 +175,11 @@ export class BunResponse extends Writable {
     return super.end(chunk, encoding, cb);
   }
 
-  override _write(chunk: Buffer, _encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+  override _write(
+    chunk: Buffer,
+    _encoding: BufferEncoding,
+    callback: (error?: Error | null) => void,
+  ): void {
     if (this.mode === 'buffered') {
       this.chunks.push(chunk);
     } else if (this.controller) {
@@ -190,7 +201,8 @@ export class BunResponse extends Writable {
       }
       this.controller = null;
     } else {
-      const body = this.fileBody ?? (this.chunks.length === 1 ? this.chunks[0]! : Buffer.concat(this.chunks));
+      const body =
+        this.fileBody ?? (this.chunks.length === 1 ? this.chunks[0]! : Buffer.concat(this.chunks));
       this.chunks = [];
       this.commit(this.isBodyless() ? null : (body as unknown as BodyInit), body);
     }
@@ -226,7 +238,11 @@ export class BunResponse extends Writable {
       headers.set('content-length', String(size));
     }
     this.resolveResponse(
-      new Response(body, { status: this.statusCode, statusText: this.statusMessage || undefined, headers }),
+      new Response(body, {
+        status: this.statusCode,
+        statusText: this.statusMessage || undefined,
+        headers,
+      }),
     );
   }
 
@@ -290,7 +306,9 @@ export class BunResponse extends Writable {
   vary(field: string): this {
     const current = this.getHeader('Vary');
     if (!current) return this.setHeader('Vary', field);
-    const list = String(current).split(',').map((s) => s.trim().toLowerCase());
+    const list = String(current)
+      .split(',')
+      .map((s) => s.trim().toLowerCase());
     if (list.includes('*') || list.includes(field.toLowerCase())) return this;
     return this.setHeader('Vary', `${current}, ${field}`);
   }
@@ -330,7 +348,8 @@ export class BunResponse extends Writable {
       return this;
     }
     if (Buffer.isBuffer(body) || body instanceof Uint8Array) {
-      if (!this.hasHeader('Content-Type')) this.setHeader('Content-Type', 'application/octet-stream');
+      if (!this.hasHeader('Content-Type'))
+        this.setHeader('Content-Type', 'application/octet-stream');
       this.end(Buffer.isBuffer(body) ? body : Buffer.from(body));
       return this;
     }
@@ -351,10 +370,18 @@ export class BunResponse extends Writable {
   }
 
   /** Express `res.sendFile(absolutePath)`; the path must be absolute. */
-  async sendFile(path: string, options: { headers?: Record<string, string> } = {}, callback?: (err?: Error) => void): Promise<void> {
+  async sendFile(
+    path: string,
+    options: { headers?: Record<string, string> } = {},
+    callback?: (err?: Error) => void,
+  ): Promise<void> {
     try {
       const file = Bun.file(path);
-      if (!(await file.exists())) throw Object.assign(new Error(`ENOENT: no such file '${path}'`), { status: 404, code: 'ENOENT' });
+      if (!(await file.exists()))
+        throw Object.assign(new Error(`ENOENT: no such file '${path}'`), {
+          status: 404,
+          code: 'ENOENT',
+        });
       if (options.headers) this.set(options.headers);
       this.sendBunFile(file);
       callback?.();
@@ -375,11 +402,20 @@ export class BunResponse extends Writable {
   }
 
   clearCookie(name: string, options: CookieOptions = {}): this {
-    return this.cookie(name, '', { path: '/', ...options, expires: new Date(1), maxAge: undefined });
+    return this.cookie(name, '', {
+      path: '/',
+      ...options,
+      expires: new Date(1),
+      maxAge: undefined,
+    });
   }
 
   /** Attaches a `render` implementation; installed by the adapter when a view engine is set. */
-  render(view: string, options?: object, callback?: (err: Error | null, html?: string) => void): void {
+  render(
+    view: string,
+    options?: object,
+    callback?: (err: Error | null, html?: string) => void,
+  ): void {
     const renderer = this.viewRenderer;
     if (!renderer) {
       const err = new Error('No view engine configured. Call app.setViewEngine() first.');

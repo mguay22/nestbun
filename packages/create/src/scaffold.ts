@@ -58,7 +58,10 @@ export async function scaffold(options: ScaffoldOptions): Promise<ScaffoldResult
   pkg.name = name;
   delete pkg['bun-create'];
 
-  let readme = (await readFile(join(dir, 'README.md'), 'utf8')).replace(/^# nest-bun$/m, `# ${name}`);
+  let readme = (await readFile(join(dir, 'README.md'), 'utf8')).replace(
+    /^# nest-bun$/m,
+    `# ${name}`,
+  );
 
   if (adapter === 'bun') {
     await cp(join(templatesDir, 'bun-adapter'), dir, { recursive: true, force: true });

@@ -30,14 +30,22 @@ describe('body parsing', () => {
   });
 
   it('rejects invalid JSON with 400', async () => {
-    const r = await t.json('/echo', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{bad' });
+    const r = await t.json('/echo', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{bad',
+    });
     expect(r.status).toBe(400);
     expect(r.body.statusCode).toBe(400);
     expect(r.body.error).toBe('Bad Request');
   });
 
   it('strict mode rejects top-level primitives', async () => {
-    const r = await t.json('/echo', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '"str"' });
+    const r = await t.json('/echo', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '"str"',
+    });
     expect(r.status).toBe(400);
   });
 
@@ -52,12 +60,20 @@ describe('body parsing', () => {
 
   it('leaves body undefined without a payload or with an unknown type', async () => {
     expect((await t.json('/echo', { method: 'POST' })).body.body).toBeNull();
-    const r = await t.json('/echo/req', { method: 'POST', headers: { 'content-type': 'text/plain' }, body: 'hi' });
+    const r = await t.json('/echo/req', {
+      method: 'POST',
+      headers: { 'content-type': 'text/plain' },
+      body: 'hi',
+    });
     expect(r.body.body).toBeNull();
   });
 
   it('accepts +json media types', async () => {
-    const r = await t.json('/echo', { method: 'POST', headers: { 'content-type': 'application/vnd.api+json' }, body: '{"x":1}' });
+    const r = await t.json('/echo', {
+      method: 'POST',
+      headers: { 'content-type': 'application/vnd.api+json' },
+      body: '{"x":1}',
+    });
     expect(r.body.body).toEqual({ x: 1 });
   });
 
@@ -77,7 +93,11 @@ describe('body parsing', () => {
       configure: (app) => app.useBodyParser('text'),
     });
     try {
-      const r = await txt.json('/echo', { method: 'POST', headers: { 'content-type': 'text/plain' }, body: 'plain text' });
+      const r = await txt.json('/echo', {
+        method: 'POST',
+        headers: { 'content-type': 'text/plain' },
+        body: 'plain text',
+      });
       expect(r.body).toEqual({ body: 'plain text', raw: null, type: 'string' });
       const j = await txt.json('/echo', jsonInit('POST', { a: 1 }));
       expect(j.body.body).toBeNull();
@@ -102,7 +122,12 @@ describe('cors', () => {
   beforeAll(async () => {
     t = await bootstrap(CorsModule, {
       configure: (app) =>
-        app.enableCors({ origin: 'https://app.example', credentials: true, allowedHeaders: ['x-a'], exposedHeaders: ['x-b'] }),
+        app.enableCors({
+          origin: 'https://app.example',
+          credentials: true,
+          allowedHeaders: ['x-a'],
+          exposedHeaders: ['x-b'],
+        }),
     });
   });
   afterAll(() => t.close());
@@ -119,7 +144,10 @@ describe('cors', () => {
   });
 
   it('adds headers to actual responses', async () => {
-    const r = await t.fetch('/cors', { method: 'POST', headers: { origin: 'https://app.example' } });
+    const r = await t.fetch('/cors', {
+      method: 'POST',
+      headers: { origin: 'https://app.example' },
+    });
     expect(r.status).toBe(201);
     expect(r.headers.get('access-control-allow-origin')).toBe('https://app.example');
     expect(r.headers.get('access-control-expose-headers')).toBe('x-b');

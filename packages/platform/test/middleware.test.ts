@@ -48,10 +48,7 @@ class MwController {
 @Module({ controllers: [MwController] })
 class MwModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(TagMiddleware)
-      .exclude('mw/excluded')
-      .forRoutes(MwController);
+    consumer.apply(TagMiddleware).exclude('mw/excluded').forRoutes(MwController);
     consumer
       .apply((req: BunRequest, _res: BunResponse, next: NextFunction) => {
         if (req.headers['authorization'] !== 'yes') return next(new UnauthorizedException('nope'));
@@ -101,7 +98,9 @@ describe('middleware', () => {
 
   it('method-scoped middleware only runs for that method', async () => {
     expect((await t.fetch('/mw/post-only')).headers.get('x-post-only')).toBeNull();
-    expect((await t.fetch('/mw/post-only', { method: 'POST' })).headers.get('x-post-only')).toBe('1');
+    expect((await t.fetch('/mw/post-only', { method: 'POST' })).headers.get('x-post-only')).toBe(
+      '1',
+    );
   });
 
   it('errors thrown in framework middleware become 500 JSON', async () => {
@@ -174,13 +173,16 @@ class VersionModule {}
 describe('versioning', () => {
   it('HEADER versioning', async () => {
     const t = await bootstrap(VersionModule, {
-      configure: (app) => app.enableVersioning({ type: VersioningType.HEADER, header: 'X-Api-Version' }),
+      configure: (app) =>
+        app.enableVersioning({ type: VersioningType.HEADER, header: 'X-Api-Version' }),
     });
     try {
       expect((await t.json('/v', { headers: { 'x-api-version': '1' } })).body).toEqual({ v: 1 });
       expect((await t.json('/v', { headers: { 'x-api-version': '2' } })).body).toEqual({ v: 2 });
       expect((await t.json('/v')).body).toEqual({ v: 2 });
-      expect((await t.json('/v/only3', { headers: { 'x-api-version': '3' } })).body).toEqual({ v: 3 });
+      expect((await t.json('/v/only3', { headers: { 'x-api-version': '3' } })).body).toEqual({
+        v: 3,
+      });
       expect((await t.json('/v/only3')).status).toBe(404);
     } finally {
       await t.close();
@@ -205,8 +207,12 @@ describe('versioning', () => {
       configure: (app) => app.enableVersioning({ type: VersioningType.MEDIA_TYPE, key: 'v=' }),
     });
     try {
-      expect((await t.json('/v', { headers: { accept: 'application/json;v=1' } })).body).toEqual({ v: 1 });
-      expect((await t.json('/v', { headers: { accept: 'application/json;v=2' } })).body).toEqual({ v: 2 });
+      expect((await t.json('/v', { headers: { accept: 'application/json;v=1' } })).body).toEqual({
+        v: 1,
+      });
+      expect((await t.json('/v', { headers: { accept: 'application/json;v=2' } })).body).toEqual({
+        v: 2,
+      });
     } finally {
       await t.close();
     }

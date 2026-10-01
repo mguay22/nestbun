@@ -23,7 +23,12 @@ async function generateAndVerify(adapter: Adapter) {
   await exec(['bun', 'test'], dir);
 
   // Boot it on a random port and hit it.
-  const server = Bun.spawn(['bun', 'src/main.ts'], { cwd: dir, env: { ...process.env, PORT: '0' }, stdout: 'pipe', stderr: 'pipe' });
+  const server = Bun.spawn(['bun', 'src/main.ts'], {
+    cwd: dir,
+    env: { ...process.env, PORT: '0' },
+    stdout: 'pipe',
+    stderr: 'pipe',
+  });
   try {
     const port = await waitForPort(server.stdout);
     const res = await fetch(`http://localhost:${port}/`);
@@ -53,14 +58,20 @@ describe('@nestbun/create', () => {
   it('refuses a non-empty directory unless forced', async () => {
     const dir = join(root, 'app-express');
     await expect(scaffold({ dir })).rejects.toThrow(/not empty/);
-    await expect(scaffold({ dir, force: true, name: 'forced' })).resolves.toMatchObject({ name: 'forced' });
+    await expect(scaffold({ dir, force: true, name: 'forced' })).resolves.toMatchObject({
+      name: 'forced',
+    });
   });
 });
 
 async function exec(cmd: string[], cwd: string): Promise<void> {
   const proc = Bun.spawn(cmd, { cwd, stdout: 'pipe', stderr: 'pipe' });
-  const [out, err] = await Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text()]);
-  if ((await proc.exited) !== 0) throw new Error(`${cmd.join(' ')} failed in ${cwd}\n${out}\n${err}`);
+  const [out, err] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+  ]);
+  if ((await proc.exited) !== 0)
+    throw new Error(`${cmd.join(' ')} failed in ${cwd}\n${out}\n${err}`);
 }
 
 async function waitForPort(stdout: ReadableStream<Uint8Array>): Promise<string> {

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import type { INestApplication, NestApplicationOptions, Type } from '@nestjs/common';
+import type { NestApplicationOptions, Type } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { BunAdapter, type BunAdapterOptions, type NestBunApplication } from '../src/index.js';
 
@@ -8,7 +8,10 @@ export interface TestApp {
   adapter: BunAdapter;
   url: string;
   fetch: (path: string, init?: RequestInit) => Promise<Response>;
-  json: <T = any>(path: string, init?: RequestInit) => Promise<{ status: number; body: T; headers: Headers }>;
+  json: <T = any>(
+    path: string,
+    init?: RequestInit,
+  ) => Promise<{ status: number; body: T; headers: Headers }>;
   close: () => Promise<void>;
 }
 
@@ -21,7 +24,10 @@ export async function bootstrap(
   } = {},
 ): Promise<TestApp> {
   const adapter = new BunAdapter(opts.adapter);
-  const app = await NestFactory.create<NestBunApplication>(module, adapter, { logger: false, ...opts.app });
+  const app = await NestFactory.create<NestBunApplication>(module, adapter, {
+    logger: false,
+    ...opts.app,
+  });
   await opts.configure?.(app, adapter);
   await app.listen(0);
   const url = await app.getUrl();
@@ -46,7 +52,11 @@ export async function bootstrap(
   };
 }
 
-export const jsonInit = (method: string, body: unknown, headers: Record<string, string> = {}): RequestInit => ({
+export const jsonInit = (
+  method: string,
+  body: unknown,
+  headers: Record<string, string> = {},
+): RequestInit => ({
   method,
   headers: { 'content-type': 'application/json', ...headers },
   body: JSON.stringify(body),
