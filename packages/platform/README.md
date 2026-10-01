@@ -54,6 +54,7 @@ Requires Bun ≥ 1.4 and NestJS ≥ 12. In a monorepo, keep a `tsconfig.json` at
 | Static assets (`useStaticAssets`) with ETag / Last-Modified / 304 | ✅ |
 | View engines: `ejs`, `hbs`, `pug`, or any `{ render(file, data) }` | ✅ |
 | `@nestjs/swagger` | ✅ |
+| `@nestjs/throttler`, `@nestjs/terminus`, `@nestjs/passport` + `passport-jwt`, `helmet`, `cookie-parser` | ✅ |
 | `httpsOptions`, `forceCloseConnections`, `return503OnClosing`, graceful shutdown | ✅ |
 | Unix socket listen (`app.listen('/tmp/app.sock')`) | ✅ |
 | `@nestjs/testing` (`createNestApplication(new BunAdapter())`) | ✅ |
