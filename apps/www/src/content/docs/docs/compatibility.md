@@ -40,7 +40,7 @@ Every ✅ row has an integration test in `packages/platform/test` that boots a r
 | `cookie-parser` | ✅ `app.use(cookieParser(secret))`, `req.cookies` / `req.signedCookies` |
 | `cors` | ✅ used internally |
 | `@nestjs/serve-static` | ⚠️ untested; use `useStaticAssets` |
-| `@nestjs/platform-socket.io`, `@nestjs/platform-ws` | ❌ attach to a Node server; wait for `@nestbun/ws` |
+| `@nestjs/platform-socket.io`, `@nestjs/platform-ws` | ❌ attach to a Node server (the adapter logs a warning when one does); wait for `@nestbun/ws` |
 | `supertest` | ❌ use `adapter.fetch()` |
 | `multer` / `@nestjs/platform-express` interceptors | ❌ Express-only |
 | Arbitrary Express middleware | ⚠️ see [Differences from Express](../differences-from-express/) |

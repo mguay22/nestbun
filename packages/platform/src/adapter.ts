@@ -107,6 +107,18 @@ export class BunAdapter extends AbstractHttpAdapter<BunHttpServer, BunRequest, B
       };
     }
     this.httpServer = new BunHttpServer(this.fetch, serve);
+    // Nest's ws and Socket.IO adapters wait for Node's 'upgrade' event, which Bun.serve never
+    // emits: without this, their gateways boot fine and every client fails with no server log.
+    const warnOnUpgrade = (event: string | symbol) => {
+      if (event !== 'upgrade') return;
+      this.httpServer.off('newListener', warnOnUpgrade);
+      this.logger.warn(
+        "A WebSocket adapter is listening for Node's 'upgrade' event, which BunAdapter never emits, " +
+          'so its gateways will not accept connections. @nestjs/platform-ws and @nestjs/platform-socket.io ' +
+          'are not supported yet: https://mguay22.github.io/nestbun/docs/compatibility/',
+      );
+    };
+    this.httpServer.on('newListener', warnOnUpgrade);
     this.forceCloseConnections = !!options?.forceCloseConnections;
     this.return503OnClosing = !!options?.return503OnClosing;
   }
